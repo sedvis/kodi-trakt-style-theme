@@ -104,15 +104,18 @@
 			</control>
 
 			<!-- ============================================================ Main column -->
+			<!-- Starts 18px left of the text column so the plot's focus ring (left -18) is not clipped;
+			     the children are moved back by left 18. -->
 			<control type="grouplist" id="9100">
-				<left>630</left>
+				<left>612</left>
 				<top>50</top>
-				<width>800</width>
+				<width>818</width>
 				<height>712</height>
 				<orientation>vertical</orientation>
 				<itemgap>8</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="label">
+					<left>18</left>
 					<width>760</width>
 					<height>40</height>
 					<font>t_label_b</font>
@@ -123,6 +126,7 @@
 				<!-- Title grows with its text, up to three t_hero lines (~100px each); the old 186px
 				     cap made two-line titles spill over the "Directed by" line. -->
 				<control type="textbox">
+					<left>18</left>
 					<width>760</width>
 					<height min="100" max="310">auto</height>
 					<font>t_hero</font>
@@ -130,6 +134,7 @@
 					<label>$VAR[TraktInfoTitle]</label>
 				</control>
 				<control type="label">
+					<left>18</left>
 					<width>760</width>
 					<height>40</height>
 					<font>t_body</font>
@@ -138,6 +143,7 @@
 					<visible>!String.IsEmpty(ListItem.Director)</visible>
 				</control>
 				<control type="label">
+					<left>18</left>
 					<width>760</width>
 					<height>40</height>
 					<font>t_meta</font>
@@ -145,6 +151,7 @@
 					<label>$VAR[TraktInfoMeta]</label>
 				</control>
 				<control type="label">
+					<left>18</left>
 					<top>-6</top>
 					<width>760</width>
 					<height>36</height>
@@ -155,6 +162,7 @@
 				</control>
 				<!-- Ratings row -->
 				<control type="grouplist">
+					<left>18</left>
 					<top>6</top>
 					<width>760</width>
 					<height>48</height>
@@ -241,6 +249,7 @@
 				</control>
 				<!-- Activity pill (Trakt shows "No activity" / your history here) -->
 				<control type="group">
+					<left>18</left>
 					<top>4</top>
 					<width>760</width>
 					<height>52</height>
@@ -261,6 +270,7 @@
 				</control>
 				<!-- Plot (focus opens the full text) -->
 				<control type="group">
+					<left>18</left>
 					<top>6</top>
 					<width>760</width>
 					<height>166</height>
@@ -291,6 +301,7 @@
 				</control>
 				<!-- Action bar -->
 				<control type="group">
+					<left>18</left>
 					<top>10</top>
 					<width>800</width>
 					<height>72</height>
@@ -409,6 +420,7 @@
 					</control>
 				</control>
 				<control type="label">
+					<left>18</left>
 					<width>760</width>
 					<height>30</height>
 					<font>t_small_m</font>
