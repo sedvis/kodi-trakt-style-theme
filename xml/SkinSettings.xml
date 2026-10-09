@@ -155,8 +155,15 @@
 				<control type="radiobutton" id="614">
 					<label>Backdrop of the focused title on the home screen</label>
 					<include>DefaultSettingButton</include>
-					<selected>!Skin.HasSetting(home_no_backdrop)</selected>
-					<onclick>Skin.ToggleSetting(home_no_backdrop)</onclick>
+					<selected>Skin.HasSetting(home_backdrop)</selected>
+					<onclick>Skin.ToggleSetting(home_backdrop)</onclick>
+				</control>
+				<control type="radiobutton" id="618">
+					<label>Mouse wheel moves between rows (not along a row)</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(home_wheel_rows)</selected>
+					<onclick>Skin.ToggleSetting(home_wheel_rows)</onclick>
+					<onclick>RunScript(special://skin/scripts/home_wheel.py)</onclick>
 				</control>
 				<control type="button" id="617">
 					<label>When Kodi starts, open</label>

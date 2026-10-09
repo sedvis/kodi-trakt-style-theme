@@ -26,6 +26,7 @@ The skin was designed and written together with [Claude](https://claude.ai) (Ant
 - **Start-up options** — open Kodi straight into Elementum (Back still returns to the home screen).
 - **Colour themes** — default Trakt purple, Classic Red, Ink Blue.
 - Skin settings for Trakt rows, local library rows, home backdrop, start-up window and home content.
+- **Mouse / touchpad friendly home screen** — the wheel moves between rows instead of scrolling a row sideways (rows scroll sideways with Left/Right, like on a remote). This uses a small keymap the skin writes to `userdata/keymaps/skin.traktstyle-home-wheel.xml`; turn it off in *Skin settings → Home screen*, or delete that file if you switch to another skin.
 
 ## Requirements
 

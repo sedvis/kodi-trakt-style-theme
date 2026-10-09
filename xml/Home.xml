@@ -8,6 +8,7 @@
 	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEqual(Skin.String(startup_target),movies)">ActivateWindow(Videos,"plugin://plugin.video.elementum/movies/",return)</onload>
 	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEqual(Skin.String(startup_target),shows)">ActivateWindow(Videos,"plugin://plugin.video.elementum/shows/",return)</onload>
 	<onload>ClearProperty(trakt_autostart,home)</onload>
+	<onload condition="String.IsEmpty(Window(home).Property(trakt_wheel_synced))">RunScript(special://skin/scripts/home_wheel.py)</onload>
 	<controls>
 		<include>TraktBackground</include>
 		<control type="videowindow">
@@ -18,7 +19,7 @@
 		<!-- Backdrop of the focused card, faded into the ink like Trakt's hero cards -->
 		<control type="group">
 			<depth>DepthBackground</depth>
-			<visible>!Skin.HasSetting(home_no_backdrop) + !Player.HasVideo</visible>
+			<visible>Skin.HasSetting(home_backdrop) + !Player.HasVideo</visible>
 			<animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
 			<control type="image">

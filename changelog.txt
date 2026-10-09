@@ -1,3 +1,7 @@
+[B]Trakt Style 1.2.1[/B]
+- Mouse wheel / touchpad on the home screen now moves between rows (the page scrolls) instead of scrolling the row under the pointer sideways; rows still scroll sideways with Left/Right. Done with a small keymap the skin writes to userdata/keymaps (skin.traktstyle-home-wheel.xml); can be turned off in Skin settings > Home screen
+- "Backdrop of the focused title on the home screen" is now off by default
+
 [B]Trakt Style 1.2.0[/B]
 - Elementum menus get their own icon set (Movies, TV Shows, Search, Torrents, Add Torrent, History, Providers, Changelog, Status, Donate, Settings, every Trakt/TMDB list), picked by each entry's path and tinted with the theme colour
 - Elementum's main menu keeps big tiles; the Movies / TV Shows menus, search history, torrent history and other add-on menus use compact two-line cards
