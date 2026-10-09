@@ -34,6 +34,8 @@ The skin was designed and written together with [Claude](https://claude.ai) (Ant
 
 ## Installation
 
+> **Android TV / Fire TV shortcut:** Downloader app code **`8136490`** → see [Option B](#option-b--android-tv--fire-tv-with-the-downloader-app-just-type-a-code).
+
 Kodi only installs zips from outside its official repo when **Settings → System → Add-ons → Unknown sources** is enabled. Turn that on first.
 
 ### Option A — via the Kodi repository (recommended, gets updates)
@@ -46,11 +48,11 @@ Kodi only installs zips from outside its official repo when **Settings → Syste
 
 New versions then arrive through Kodi's normal add-on updates.
 
-### Option B — Android TV / Fire TV with the Downloader app (no typing a URL in Kodi)
+### Option B — Android TV / Fire TV with the Downloader app (just type a code)
 
 1. Install **Downloader** (by AFTVnews) from the Play Store / Amazon Appstore.
-2. In Downloader, enter the URL (or its short Downloader code):
-   `https://sedvis.github.io/kodi-trakt-style-theme/repository.traktstyle.zip`
+2. In Downloader, enter the code **`8136490`**.
+   It points to `https://sedvis.github.io/kodi-trakt-style-theme/repository.traktstyle.zip` (also reachable in any browser as `aftv.news/8136490`), which always serves the latest repository add-on.
    The file is saved to the device's `Download` folder.
 3. In Kodi: **Settings → Add-ons → Install from zip file → External storage → Download → `repository.traktstyle.zip`** (allow Kodi storage access if Android asks), then continue with step 3 of Option A.
 
