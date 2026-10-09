@@ -205,7 +205,7 @@
 		<value condition="Integer.IsGreater(ListItem.PlayCount,0)">Watched</value>
 		<value condition="ListItem.IsResumable">In progress  •  $INFO[ListItem.PercentPlayed]%</value>
 		<value condition="Integer.IsGreater(ListItem.Property(watchedepisodes),0)">$INFO[ListItem.Property(watchedepisodes)] of $INFO[ListItem.Property(totalepisodes)] episodes watched</value>
-		<value>No activity</value>
+		<value>Not watched yet</value>
 	</variable>
 	<variable name="TraktInfoTooltip">
 		<value condition="Control.HasFocus(200)">Next episode from your Trakt progress, otherwise the first episode</value>
@@ -427,9 +427,9 @@
 				</control>
 			</control>
 			<control type="label">
-				<right>150</right>
+				<right>300</right>
 				<top>2</top>
-				<width>820</width>
+				<width>640</width>
 				<height>60</height>
 				<align>right</align>
 				<aligny>center</aligny>
@@ -1240,6 +1240,46 @@
 				<texturesliderbarfocus />
 				<showonepage>true</showonepage>
 			</control>
+			<!-- "View all": opens the row's source (an Elementum list, with its own paging) in the
+			     Videos window; Back returns here. Reached with Right at the end of the row; with the
+			     mouse, the row title opens it too. Both sit in the header line but belong to the
+			     row group, so Up / Down still move straight between rows. -->
+			<control type="button" id="$PARAM[list_id]4">
+				<left>0</left>
+				<top>-64</top>
+				<width>900</width>
+				<height>58</height>
+				<label></label>
+				<texturefocus />
+				<texturenofocus />
+				<onclick>ActivateWindow(Videos,"$PARAM[path]",return)</onclick>
+				<onup>$PARAM[list_id]0</onup>
+				<ondown>$PARAM[list_id]8</ondown>
+				<onleft>$PARAM[list_id]</onleft>
+				<onright>$PARAM[list_id]5</onright>
+			</control>
+			<control type="button" id="$PARAM[list_id]5">
+				<left>1500</left>
+				<top>-57</top>
+				<width>148</width>
+				<height>44</height>
+				<label>View all</label>
+				<font>t_label</font>
+				<textcolor>text_hi</textcolor>
+				<focusedcolor>text_hi</focusedcolor>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textoffsetx>0</textoffsetx>
+				<texturefocus colordiffuse="accent" border="22">trakt/frames/pill44.png</texturefocus>
+				<texturenofocus colordiffuse="surface_hi" border="22">trakt/frames/pill44.png</texturenofocus>
+				<onclick>ActivateWindow(Videos,"$PARAM[path]",return)</onclick>
+				<onup>$PARAM[list_id]0</onup>
+				<ondown>$PARAM[list_id]8</ondown>
+				<onleft>$PARAM[list_id]</onleft>
+				<onright>$PARAM[list_id]3</onright>
+				<visible>ControlGroup($PARAM[list_id]1).HasFocus()</visible>
+				<animation effect="fade" time="150">VisibleChange</animation>
+			</control>
 			<include content="TraktRowArrow">
 				<param name="id">$PARAM[list_id]2</param>
 				<param name="list_id">$PARAM[list_id]</param>
@@ -1274,6 +1314,8 @@
 		<orientation>horizontal</orientation>
 		<scrolltime tween="cubic" easing="out">380</scrolltime>
 		<onleft>9000</onleft>
+		<!-- Right at the end of the row: the row's "View all" button (TraktRowArrows). -->
+		<onright>$PARAM[list_id]5</onright>
 		<!-- The list sits inside a group (with the mouse arrows), so the home grouplist no longer
 		     sets its up/down: go through the row header (up) and the hidden row end marker (down),
 		     whose navigation the grouplist does set. -->
@@ -1339,6 +1381,7 @@
 				</control>
 				<include content="TraktRowArrows">
 					<param name="list_id">$PARAM[list_id]</param>
+					<param name="path">$PARAM[path]</param>
 				</include>
 			</control>
 			<include content="TraktRowEnd">
@@ -1403,6 +1446,7 @@
 				</control>
 				<include content="TraktRowArrows">
 					<param name="list_id">$PARAM[list_id]</param>
+					<param name="path">$PARAM[path]</param>
 				</include>
 			</control>
 			<include content="TraktRowEnd">
