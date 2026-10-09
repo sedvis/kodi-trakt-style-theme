@@ -1,4 +1,4 @@
-[B]Unreleased[/B]
+[B]Trakt Style 1.2.3[/B]
 - Home: selecting a movie, show or episode opens its info page first (Play / Browse are there). Continue Watching still starts playback right away
 - Info page of an Elementum TV show: new Play button plays the next episode from your Trakt progress, or the first episode when the show isn't in progress; Browse becomes the second button
 - Info page: long titles no longer run into the "Directed by" line
