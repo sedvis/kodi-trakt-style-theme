@@ -308,6 +308,8 @@ def build():
 			<onup condition="$EXP[home_mode_media]">101</onup>
 			<onup condition="$EXP[home_mode_shows]">102</onup>
 			<onup condition="$EXP[home_mode_movies]">103</onup>
+			<!-- Without this the grouplist wraps Down from the last row to the first one. -->
+			<ondown>noop</ondown>
 			<onleft>9000</onleft>
 			<usecontrolcoords>true</usecontrolcoords>
 			<animation effect="fade" start="100" end="45" time="200" condition="ControlGroup(9000).HasFocus | Control.HasFocus(9010)">Conditional</animation>

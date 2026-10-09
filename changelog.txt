@@ -1,4 +1,5 @@
 [B]Unreleased[/B]
+- Home: scrolling down (mouse wheel, touchpad or Down) stops at the last row instead of jumping back to the first one
 - A short notification shows the skin version the first time the home screen opens after an update
 - Add-on info: author is now "sedvis"; Estuary's authors are credited in the description
 
