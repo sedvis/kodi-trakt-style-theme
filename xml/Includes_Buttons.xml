@@ -241,8 +241,8 @@
 			<height>142</height>
 			<align>center</align>
 			<aligny>top</aligny>
-			<texturefocus border="21" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
-			<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+			<texturefocus border="32" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
+			<texturenofocus border="32">buttons/button-nofo.png</texturenofocus>
 			<textoffsetx>22</textoffsetx>
 			<textoffsety>78</textoffsety>
 			<radioposx>108</radioposx>
@@ -268,8 +268,8 @@
 				<height>142</height>
 				<align>center</align>
 				<aligny>top</aligny>
-				<texturefocus border="21" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
-				<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+				<texturefocus border="32" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
+				<texturenofocus border="32">buttons/button-nofo.png</texturenofocus>
 				<textoffsetx>22</textoffsetx>
 				<textoffsety>78</textoffsety>
 				<radioposx>108</radioposx>
@@ -299,8 +299,8 @@
 				<height>142</height>
 				<align>center</align>
 				<aligny>top</aligny>
-				<texturefocus border="21" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
-				<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+				<texturefocus border="32" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
+				<texturenofocus border="32">buttons/button-nofo.png</texturenofocus>
 				<textoffsetx>35</textoffsetx>
 				<textoffsety>78</textoffsety>
 				<radioposx>108</radioposx>

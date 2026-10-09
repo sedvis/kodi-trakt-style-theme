@@ -93,7 +93,7 @@
 						<width>720</width>
 						<height>430</height>
 						<label></label>
-						<texturenofocus border="21">dialogs/dialog-bg.png</texturenofocus>
+						<texturenofocus border="36">dialogs/dialog-bg.png</texturenofocus>
 						<onclick>SetProperty(TextViewer_Header,$LOCALIZE[21821],home)</onclick>
 						<onclick>SetProperty(TextViewer_Text,$ESCVAR[MusicInfoTextboxVar],home)</onclick>
 						<onclick condition="[String.IsEqual(ListItem.DbType,song) + !String.IsEmpty(ListItem.Comment)] | [String.IsEqual(ListItem.DbType,album) + !String.IsEmpty(ListItem.Property(Album_Description))] | [String.IsEqual(ListItem.DbType,artist) + !String.IsEmpty(ListItem.Property(Artist_Description))]">ActivateWindow(1102)</onclick>
@@ -193,7 +193,7 @@
 							<top>-10</top>
 							<width>595</width>
 							<height>100</height>
-							<texture border="21">buttons/button-nofo.png</texture>
+							<texture border="32">buttons/button-nofo.png</texture>
 						</control>
 						<control type="label">
 							<left>40</left>
@@ -210,7 +210,7 @@
 							<top>-10</top>
 							<width>595</width>
 							<height>100</height>
-							<texture border="21" colordiffuse="button_focus">buttons/button-fo.png</texture>
+							<texture border="32" colordiffuse="button_focus">buttons/button-fo.png</texture>
 						</control>
 						<control type="label">
 							<left>40</left>
@@ -227,7 +227,7 @@
 							<top>-10</top>
 							<width>595</width>
 							<height>100</height>
-							<texture border="21">buttons/button-nofo.png</texture>
+							<texture border="32">buttons/button-nofo.png</texture>
 						</control>
 						<control type="label">
 							<left>40</left>
@@ -250,7 +250,7 @@
 								<top>-10</top>
 								<width>595</width>
 								<height>100</height>
-								<texture border="21" colordiffuse="button_focus">buttons/button-fo.png</texture>
+								<texture border="32" colordiffuse="button_focus">buttons/button-fo.png</texture>
 							</control>
 							<control type="label">
 								<left>40</left>
@@ -273,7 +273,7 @@
 							<top>-10</top>
 							<width>250</width>
 							<height>312</height>
-							<texture border="21">buttons/button-nofo.png</texture>
+							<texture border="32">buttons/button-nofo.png</texture>
 						</control>
 						<control type="image">
 							<left>30</left>
@@ -309,7 +309,7 @@
 								<top>-10</top>
 								<width>250</width>
 								<height>312</height>
-								<texture border="21">buttons/button-nofo.png</texture>
+								<texture border="32">buttons/button-nofo.png</texture>
 							</control>
 							<control type="image">
 								<left>30</left>

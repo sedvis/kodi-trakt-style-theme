@@ -1,6 +1,8 @@
 """Redraw Estuary's stock 9-slice textures in the Trakt style (rounded corners, ink surfaces).
 
-Canvas sizes and margins stay identical to Estuary's so every existing border="" value keeps working.
+Canvas sizes and margins stay identical to Estuary's. The 9-slice border must still cover the
+20px margin plus the corner radius, or the corners get stretched into ovals on tall controls:
+border >= 32 for the 80x80 buttons (radius 12) and >= 36 for dialogs/dialog-bg.png (radius 16).
 """
 import os
 from PIL import Image, ImageDraw, ImageFilter

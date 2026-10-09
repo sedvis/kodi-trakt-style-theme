@@ -78,7 +78,7 @@
 					<top>100</top>
 					<width>95%</width>
 					<height>220</height>
-					<texture border="21">dialogs/dialog-bg.png</texture>
+					<texture border="36">dialogs/dialog-bg.png</texture>
 				</control>
 				<control type="label">
 					<top>310</top>
