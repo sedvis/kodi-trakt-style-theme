@@ -7,7 +7,9 @@
 	<expression name="home_mode_media">!String.IsEqual(Skin.String(home_mode),shows) + !String.IsEqual(Skin.String(home_mode),movies)</expression>
 	<expression name="home_mode_shows">String.IsEqual(Skin.String(home_mode),shows)</expression>
 	<expression name="home_mode_movies">String.IsEqual(Skin.String(home_mode),movies)</expression>
-	<expression name="startup_elementum">System.AddonIsEnabled(plugin.video.elementum) + !String.IsEqual(Skin.String(startup_target),home)</expression>
+	<!-- Start-up target: empty / "home" = Home screen (default), "elementum" = Elementum main menu,
+	     "movies" / "shows" = Elementum movies / TV shows. -->
+	<expression name="startup_elementum">System.AddonIsEnabled(plugin.video.elementum) + [String.IsEqual(Skin.String(startup_target),elementum) | String.IsEqual(Skin.String(startup_target),movies) | String.IsEqual(Skin.String(startup_target),shows)]</expression>
 	<!-- Kodi consumes the "specialsort" property, so Elementum's "Next page" item is recognised by its nextpage.png thumbnail. -->
 	<expression name="item_is_nextpage">String.EndsWith(ListItem.Art(thumb),nextpage.png) | String.EndsWith(ListItem.Icon,nextpage.png)</expression>
 	<expression name="item_is_episode">String.IsEqual(ListItem.DBType,episode)</expression>
@@ -1183,6 +1185,10 @@
 	</include>
 
 	<!-- ===================================================================== Rows -->
+	<!-- Home rows load lazily: their content path is empty unless their tab is active
+	     (Includes_HomeRows.xml), so only the visible tab calls Elementum. A row is shown while it has
+	     items or is loading, and also while trakt_rows_kick is set (a second after a tab switch):
+	     a hidden row is never processed and would not notice its new path otherwise. -->
 	<!-- Mouse / touchpad: page a home row sideways with the arrows at the right end of its header.
 	     Shown on the focused row (hovering a row focuses it); they page the row through its
 	     invisible page control and are outside the keyboard path (the row group always focuses
@@ -1278,7 +1284,7 @@
 		     (Continue Watching) keep Kodi's default and start playback right away. "Next page"
 		     items always open the next page. -->
 		<onclick condition="$PARAM[open_info] + !$EXP[item_is_nextpage] + !ListItem.IsParentFolder">Action(Info)</onclick>
-		<preloaditems>2</preloaditems>
+		<preloaditems>1</preloaditems>
 		<onback>SetFocus($PARAM[list_id],0,absolute)</onback>
 	</include>
 	<include name="TraktPosterRow">
@@ -1294,7 +1300,7 @@
 				<width>1780</width>
 				<height>58</height>
 				<visible>$PARAM[visible]</visible>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating | !String.IsEmpty(Window(home).Property(trakt_rows_kick))</visible>
 				<include content="TraktSectionHeader">
 					<param name="label">$PARAM[label]</param>
 					<param name="list_id">$PARAM[list_id]</param>
@@ -1310,12 +1316,12 @@
 				<height>388</height>
 				<defaultcontrol always="true">$PARAM[list_id]</defaultcontrol>
 				<visible>$PARAM[visible]</visible>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating | !String.IsEmpty(Window(home).Property(trakt_rows_kick))</visible>
 				<control type="list" id="$PARAM[list_id]">
 					<width>1780</width>
 					<height>388</height>
 					<visible>$PARAM[visible]</visible>
-					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating | !String.IsEmpty(Window(home).Property(trakt_rows_kick))</visible>
 					<include content="TraktRowCommon">
 						<param name="list_id">$PARAM[list_id]</param>
 						<param name="open_info">$PARAM[open_info]</param>
@@ -1353,7 +1359,7 @@
 				<width>1780</width>
 				<height>58</height>
 				<visible>$PARAM[visible]</visible>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating | !String.IsEmpty(Window(home).Property(trakt_rows_kick))</visible>
 				<include content="TraktSectionHeader">
 					<param name="label">$PARAM[label]</param>
 					<param name="list_id">$PARAM[list_id]</param>
@@ -1370,12 +1376,12 @@
 				<height>306</height>
 				<defaultcontrol always="true">$PARAM[list_id]</defaultcontrol>
 				<visible>$PARAM[visible]</visible>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating | !String.IsEmpty(Window(home).Property(trakt_rows_kick))</visible>
 				<control type="list" id="$PARAM[list_id]">
 					<width>1780</width>
 					<height>306</height>
 					<visible>$PARAM[visible]</visible>
-					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating | !String.IsEmpty(Window(home).Property(trakt_rows_kick))</visible>
 					<include content="TraktRowCommon">
 						<param name="list_id">$PARAM[list_id]</param>
 						<param name="open_info">$PARAM[open_info]</param>

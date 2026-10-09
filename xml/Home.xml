@@ -4,7 +4,7 @@
 	<defaultcontrol always="true">5000</defaultcontrol>
 	<backgroundcolor>background</backgroundcolor>
 	<!-- Start-up jump into Elementum (set by Startup.xml); opened from here so Back returns to Home. -->
-	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEmpty(Skin.String(startup_target))">ActivateWindow(Videos,"plugin://plugin.video.elementum/",return)</onload>
+	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEqual(Skin.String(startup_target),elementum)">ActivateWindow(Videos,"plugin://plugin.video.elementum/",return)</onload>
 	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEqual(Skin.String(startup_target),movies)">ActivateWindow(Videos,"plugin://plugin.video.elementum/movies/",return)</onload>
 	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEqual(Skin.String(startup_target),shows)">ActivateWindow(Videos,"plugin://plugin.video.elementum/shows/",return)</onload>
 	<onload>ClearProperty(trakt_autostart,home)</onload>
@@ -89,14 +89,14 @@
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5101</param>
 						<param name="label">Continue Watching</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/progress</param>
+						<param name="path">$VAR[TraktRowPath_5101]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 						<param name="open_info">false</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5102</param>
 						<param name="label">Calendar</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/calendars/shows</param>
+						<param name="path">$VAR[TraktRowPath_5102]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 						<param name="pill_right">$INFO[ListItem.Premiered]</param>
 						<param name="pill_right_visible">true</param>
@@ -104,56 +104,56 @@
 					<include content="TraktPosterRow">
 						<param name="list_id">5103</param>
 						<param name="label">Watchlist · Movies</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/watchlist</param>
+						<param name="path">$VAR[TraktRowPath_5103]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5104</param>
 						<param name="label">Watchlist · Shows</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/watchlist</param>
+						<param name="path">$VAR[TraktRowPath_5104]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5105</param>
 						<param name="label">Recommended Movies</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/recommendations</param>
+						<param name="path">$VAR[TraktRowPath_5105]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5106</param>
 						<param name="label">Trending Movies</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/trending</param>
+						<param name="path">$VAR[TraktRowPath_5106]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5107</param>
 						<param name="label">Trending Shows</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/trending</param>
+						<param name="path">$VAR[TraktRowPath_5107]</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5108</param>
 						<param name="label">In Progress · Library</param>
-						<param name="path">special://skin/playlists/inprogress_movies.xsp</param>
+						<param name="path">$VAR[TraktRowPath_5108]</param>
 						<param name="visible">$EXP[home_mode_media] + Library.HasContent(movies) + !Skin.HasSetting(home_no_library)</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5109</param>
 						<param name="label">Recently Added Episodes · Library</param>
-						<param name="path">videodb://recentlyaddedepisodes/</param>
+						<param name="path">$VAR[TraktRowPath_5109]</param>
 						<param name="visible">$EXP[home_mode_media] + Library.HasContent(tvshows) + !Skin.HasSetting(home_no_library)</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5201</param>
 						<param name="label">Continue Watching</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/progress</param>
+						<param name="path">$VAR[TraktRowPath_5201]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 						<param name="open_info">false</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5202</param>
 						<param name="label">Calendar</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/calendars/shows</param>
+						<param name="path">$VAR[TraktRowPath_5202]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 						<param name="pill_right">$INFO[ListItem.Premiered]</param>
 						<param name="pill_right_visible">true</param>
@@ -161,37 +161,37 @@
 					<include content="TraktPosterRow">
 						<param name="list_id">5203</param>
 						<param name="label">Trending</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/trending</param>
+						<param name="path">$VAR[TraktRowPath_5203]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5204</param>
 						<param name="label">Popular</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/popular</param>
+						<param name="path">$VAR[TraktRowPath_5204]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5205</param>
 						<param name="label">Anticipated</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/anticipated</param>
+						<param name="path">$VAR[TraktRowPath_5205]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5206</param>
 						<param name="label">Recommended</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/recommendations</param>
+						<param name="path">$VAR[TraktRowPath_5206]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5207</param>
 						<param name="label">Watchlist</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/watchlist</param>
+						<param name="path">$VAR[TraktRowPath_5207]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5208</param>
 						<param name="label">Premieres</param>
-						<param name="path">plugin://plugin.video.elementum/shows/trakt/calendars/allpremieres</param>
+						<param name="path">$VAR[TraktRowPath_5208]</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on]</param>
 						<param name="pill_right">$INFO[ListItem.Premiered]</param>
 						<param name="pill_right_visible">true</param>
@@ -199,55 +199,55 @@
 					<include content="TraktPosterRow">
 						<param name="list_id">5209</param>
 						<param name="label">TV Shows · Library</param>
-						<param name="path">videodb://tvshows/titles/</param>
+						<param name="path">$VAR[TraktRowPath_5209]</param>
 						<param name="visible">$EXP[home_mode_shows] + Library.HasContent(tvshows) + !Skin.HasSetting(home_no_library)</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5301</param>
 						<param name="label">Trending</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/trending</param>
+						<param name="path">$VAR[TraktRowPath_5301]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5302</param>
 						<param name="label">Box Office</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/boxoffice</param>
+						<param name="path">$VAR[TraktRowPath_5302]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5303</param>
 						<param name="label">Anticipated</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/anticipated</param>
+						<param name="path">$VAR[TraktRowPath_5303]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5304</param>
 						<param name="label">Popular</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/popular</param>
+						<param name="path">$VAR[TraktRowPath_5304]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5305</param>
 						<param name="label">Recommended</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/recommendations</param>
+						<param name="path">$VAR[TraktRowPath_5305]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5306</param>
 						<param name="label">Watchlist</param>
-						<param name="path">plugin://plugin.video.elementum/movies/trakt/watchlist</param>
+						<param name="path">$VAR[TraktRowPath_5306]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5307</param>
 						<param name="label">Top Rated</param>
-						<param name="path">plugin://plugin.video.elementum/movies/top</param>
+						<param name="path">$VAR[TraktRowPath_5307]</param>
 						<param name="visible">$EXP[home_mode_movies] + $EXP[elementum_on]</param>
 					</include>
 					<include content="TraktPosterRow">
 						<param name="list_id">5308</param>
 						<param name="label">Movies · Library</param>
-						<param name="path">videodb://movies/titles/</param>
+						<param name="path">$VAR[TraktRowPath_5308]</param>
 						<param name="visible">$EXP[home_mode_movies] + Library.HasContent(movies) + !Skin.HasSetting(home_no_library)</param>
 					</include>
 		</control>
@@ -282,6 +282,10 @@
 					<texturenofocus />
 					<label></label>
 					<onclick>Skin.SetString(home_mode,media)</onclick>
+					<!-- Rows of the new tab are hidden and so never re-read their (now non-empty) content
+					     path; show them for a moment so they start loading (see the Rows notes in Includes_Trakt.xml). -->
+					<onclick>SetProperty(trakt_rows_kick,1,home)</onclick>
+					<onclick>AlarmClock(trakt_rows_kick,ClearProperty(trakt_rows_kick,home),00:01,silent)</onclick>
 					<onleft>9000</onleft>
 					<onright>102</onright>
 					<onup>noop</onup>
@@ -336,6 +340,10 @@
 					<texturenofocus />
 					<label></label>
 					<onclick>Skin.SetString(home_mode,shows)</onclick>
+					<!-- Rows of the new tab are hidden and so never re-read their (now non-empty) content
+					     path; show them for a moment so they start loading (see the Rows notes in Includes_Trakt.xml). -->
+					<onclick>SetProperty(trakt_rows_kick,1,home)</onclick>
+					<onclick>AlarmClock(trakt_rows_kick,ClearProperty(trakt_rows_kick,home),00:01,silent)</onclick>
 					<onleft>101</onleft>
 					<onright>103</onright>
 					<onup>noop</onup>
@@ -390,6 +398,10 @@
 					<texturenofocus />
 					<label></label>
 					<onclick>Skin.SetString(home_mode,movies)</onclick>
+					<!-- Rows of the new tab are hidden and so never re-read their (now non-empty) content
+					     path; show them for a moment so they start loading (see the Rows notes in Includes_Trakt.xml). -->
+					<onclick>SetProperty(trakt_rows_kick,1,home)</onclick>
+					<onclick>AlarmClock(trakt_rows_kick,ClearProperty(trakt_rows_kick,home),00:01,silent)</onclick>
 					<onleft>102</onleft>
 					<onright>noop</onright>
 					<onup>noop</onup>

@@ -169,10 +169,10 @@
 					<label>When Kodi starts, open</label>
 					<label2>$VAR[StartupTargetLabel2Var]</label2>
 					<include>DefaultSettingButton</include>
-					<onclick condition="String.IsEmpty(Skin.String(startup_target))">Skin.SetString(startup_target,movies)</onclick>
+					<onclick condition="String.IsEmpty(Skin.String(startup_target)) | String.IsEqual(Skin.String(startup_target),home)">Skin.SetString(startup_target,elementum)</onclick>
+					<onclick condition="String.IsEqual(Skin.String(startup_target),elementum)">Skin.SetString(startup_target,movies)</onclick>
 					<onclick condition="String.IsEqual(Skin.String(startup_target),movies)">Skin.SetString(startup_target,shows)</onclick>
-					<onclick condition="String.IsEqual(Skin.String(startup_target),shows)">Skin.SetString(startup_target,home)</onclick>
-					<onclick condition="String.IsEqual(Skin.String(startup_target),home)">Skin.Reset(startup_target)</onclick>
+					<onclick condition="String.IsEqual(Skin.String(startup_target),shows)">Skin.Reset(startup_target)</onclick>
 				</control>
 				<control type="button" id="615">
 					<label>Home screen shows</label>

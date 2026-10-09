@@ -2,6 +2,8 @@
 - Home: selecting a movie, show or episode opens its info page first (Play / Browse are there). Continue Watching still starts playback right away
 - Info page of an Elementum TV show: new Play button plays the next episode from your Trakt progress, or the first episode when the show isn't in progress; Browse becomes the second button
 - Info page: long titles no longer run into the "Directed by" line
+- Home loads only the rows of the active tab (Media / Shows / Movies) instead of every row of every tab at start-up, and personal Trakt rows only when Trakt is connected; rows preload one page ahead instead of two. Much lighter on Android boxes
+- Kodi now starts on the Home screen by default; "Elementum main menu" is still available under Skin settings > Home screen > When Kodi starts, open
 
 [B]Trakt Style 1.2.2[/B]
 - Home rows longer than the screen can now be paged with the mouse / touchpad: hovering a row shows ‹ › arrows at the right end of its header; they scroll the row a page at a time without moving the focus. Keyboard and remote navigation is unchanged

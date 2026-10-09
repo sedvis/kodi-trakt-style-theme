@@ -671,8 +671,8 @@
 	<variable name="StartupTargetLabel2Var">
 		<value condition="String.IsEqual(Skin.String(startup_target),movies)">Elementum movies</value>
 		<value condition="String.IsEqual(Skin.String(startup_target),shows)">Elementum TV shows</value>
-		<value condition="String.IsEqual(Skin.String(startup_target),home)">Home screen</value>
-		<value>Elementum main menu</value>
+		<value condition="String.IsEqual(Skin.String(startup_target),elementum)">Elementum main menu</value>
+		<value>Home screen</value>
 	</variable>
 	<variable name="ColourThemeLabel2Var">
 		<value condition="String.IsEqual(Skin.CurrentColourTheme,classic_red)">Classic red</value>

@@ -3,6 +3,7 @@
 	<include file="Defaults.xml" />
 	<include file="Includes_Home.xml" />
 	<include file="Includes_Trakt.xml" />
+	<include file="Includes_HomeRows.xml" />
 	<include file="Includes_TraktPlayer.xml" />
 	<include file="Includes_Animations.xml" />
 	<include file="Includes_Games.xml" />

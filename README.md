@@ -68,6 +68,12 @@ Download `skin.traktstyle-<version>.zip` from the [Releases](https://github.com/
 - Install Elementum and sign in to Trakt from its settings (**Elementum → Settings → Trakt → Authorize**).
 - **Settings → Interface → Skin → Configure skin…** — choose what the home screen shows, whether Kodi opens straight into Elementum, the colour theme and whether to show local library rows.
 
+## Performance on Android TV / low-power boxes
+
+- The home screen only loads the rows of the tab you are on, so start-up asks Elementum for about 7 lists instead of 26.
+- Elementum serves TMDB artwork at "High" quality by default (w780 posters, w1280 backdrops), far larger than the cards. On slower boxes set **Elementum → Settings → Appearance → TMDB images quality** to **Medium** or **Low** (Low = w342 posters, w500 / w780 backdrops). Elementum labels this setting "affects Kodi performance" for a reason.
+- Optional: clearing Kodi's thumbnail cache after changing the quality frees space from the old, larger images.
+
 ## Building
 
 ```bash
