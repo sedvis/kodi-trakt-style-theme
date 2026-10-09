@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trakt Style: movie / show / episode page, laid out like a Trakt title page.
+     Kodi-handled control ids kept from Estuary: 8 play/browse, 11 trailer, 7 user rating, 13 director,
+     14 versions, 15 extras, 10 artwork, 6 refresh, 50 cast, 138 plot (text viewer). -->
+<window>
+	<defaultcontrol always="true">8</defaultcontrol>
+	<onload>SetProperty(infobackground,$ESCINFO[ListItem.Art(fanart)],home)</onload>
+	<onunload>ClearProperty(infobackground,home)</onunload>
+	<controls>
+		<!-- ============================================================ Backdrop -->
+		<control type="group">
+			<animation effect="fade" start="0" end="100" time="250">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+			<control type="image">
+				<include>FullScreenDimensions</include>
+				<texture colordiffuse="ink">trakt/frames/white.png</texture>
+			</control>
+			<control type="image">
+				<left>-80</left>
+				<top>-60</top>
+				<width>2080</width>
+				<height>1200</height>
+				<aspectratio>scale</aspectratio>
+				<fadetime>400</fadetime>
+				<texture background="true" colordiffuse="55FFFFFF">$VAR[TraktInfoBackdrop]</texture>
+			</control>
+			<control type="image">
+				<include>FullScreenDimensions</include>
+				<texture colordiffuse="DD17141A">trakt/gradients/bottom.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>1300</width>
+				<height>1080</height>
+				<texture colordiffuse="AA17141A">trakt/gradients/left.png</texture>
+			</control>
+			<control type="image">
+				<left>-300</left>
+				<top>-300</top>
+				<width>1900</width>
+				<height>1200</height>
+				<texture colordiffuse="accent_deep">trakt/gradients/glow-tl.png</texture>
+				<animation effect="fade" start="100" end="55" time="0" condition="true">Conditional</animation>
+			</control>
+			<control type="image">
+				<left>0</left>
+				<top>700</top>
+				<width>1920</width>
+				<height>380</height>
+				<texture colordiffuse="ink">trakt/gradients/bottom.png</texture>
+			</control>
+		</control>
+
+		<control type="group">
+			<animation effect="fade" start="0" end="100" time="300" delay="80">WindowOpen</animation>
+			<animation effect="slide" start="0,24" end="0,0" time="300" delay="80" tween="cubic" easing="out">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="180">WindowClose</animation>
+
+			<!-- ============================================================ Poster -->
+			<control type="group">
+				<left>150</left>
+				<top>70</top>
+				<control type="image">
+					<width>420</width>
+					<height>630</height>
+					<texture colordiffuse="surface" border="18">trakt/frames/rr16.png</texture>
+				</control>
+				<control type="image">
+					<width>420</width>
+					<height>630</height>
+					<aspectratio>scale</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" diffuse="trakt/masks/poster-lg.png">$VAR[TraktInfoPoster]</texture>
+				</control>
+				<control type="group">
+					<left>130</left>
+					<top>612</top>
+					<visible>Integer.IsGreater(ListItem.PlayCount,0) | ListItem.IsResumable</visible>
+					<control type="image">
+						<width>160</width>
+						<height>36</height>
+						<texture colordiffuse="text_hi" border="18">trakt/frames/pill36.png</texture>
+					</control>
+					<control type="image">
+						<left>16</left>
+						<top>8</top>
+						<width>20</width>
+						<height>20</height>
+						<texture colordiffuse="ink">trakt/icons/check.png</texture>
+					</control>
+					<control type="label">
+						<left>40</left>
+						<width>106</width>
+						<height>36</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<font>t_badge</font>
+						<textcolor>ink</textcolor>
+						<label>$VAR[TraktInfoPosterBadge]</label>
+					</control>
+				</control>
+			</control>
+
+			<!-- ============================================================ Main column -->
+			<control type="grouplist" id="9100">
+				<left>630</left>
+				<top>50</top>
+				<width>800</width>
+				<height>712</height>
+				<orientation>vertical</orientation>
+				<itemgap>8</itemgap>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="label">
+					<width>760</width>
+					<height>40</height>
+					<font>t_label_b</font>
+					<textcolor>accent_light</textcolor>
+					<label>$VAR[TraktInfoPretitle]</label>
+					<visible>!String.IsEmpty(ListItem.TVShowTitle) + [String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]</visible>
+				</control>
+				<control type="textbox">
+					<width>760</width>
+					<height min="94" max="186">auto</height>
+					<font>t_hero</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[TraktInfoTitle]</label>
+				</control>
+				<control type="label">
+					<width>760</width>
+					<height>40</height>
+					<font>t_body</font>
+					<textcolor>text_mid</textcolor>
+					<label>Directed by [COLOR text_hi]$INFO[ListItem.Director][/COLOR]</label>
+					<visible>!String.IsEmpty(ListItem.Director)</visible>
+				</control>
+				<control type="label">
+					<width>760</width>
+					<height>40</height>
+					<font>t_meta</font>
+					<textcolor>text_lo</textcolor>
+					<label>$VAR[TraktInfoMeta]</label>
+				</control>
+				<control type="label">
+					<top>-6</top>
+					<width>760</width>
+					<height>36</height>
+					<font>t_label_b</font>
+					<textcolor>accent_light</textcolor>
+					<label>$VAR[TraktInfoStatus]</label>
+					<visible>String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Status)</visible>
+				</control>
+				<!-- Ratings row -->
+				<control type="grouplist">
+					<top>6</top>
+					<width>760</width>
+					<height>48</height>
+					<orientation>horizontal</orientation>
+					<itemgap>12</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<control type="image">
+						<top>11</top>
+						<width>26</width>
+						<height>26</height>
+						<texture colordiffuse="accent_light">trakt/icons/star-filled.png</texture>
+						<visible>!String.IsEmpty(ListItem.Rating)</visible>
+					</control>
+					<control type="label">
+						<width>auto</width>
+						<height>48</height>
+						<aligny>center</aligny>
+						<font>t_title_s</font>
+						<textcolor>text_hi</textcolor>
+						<label>$INFO[ListItem.Rating]</label>
+					</control>
+					<control type="label">
+						<width>auto</width>
+						<height>48</height>
+						<aligny>center</aligny>
+						<font>t_small</font>
+						<textcolor>text_lo</textcolor>
+						<label>$INFO[ListItem.Votes,, votes]</label>
+						<visible>!String.IsEmpty(ListItem.Votes)</visible>
+					</control>
+					<control type="image">
+						<left>18</left>
+						<top>7</top>
+						<width>68</width>
+						<height>34</height>
+						<aspectratio>keep</aspectratio>
+						<texture>trakt/badges/imdb.png</texture>
+						<visible>!String.IsEmpty(ListItem.Rating(imdb))</visible>
+					</control>
+					<control type="label">
+						<width>auto</width>
+						<height>48</height>
+						<aligny>center</aligny>
+						<font>t_title_s</font>
+						<textcolor>text_hi</textcolor>
+						<label>$INFO[ListItem.Rating(imdb)]</label>
+						<visible>!String.IsEmpty(ListItem.Rating(imdb))</visible>
+					</control>
+					<control type="image">
+						<left>18</left>
+						<top>7</top>
+						<width>72</width>
+						<height>34</height>
+						<aspectratio>keep</aspectratio>
+						<texture>trakt/badges/tmdb.png</texture>
+						<visible>!String.IsEmpty(ListItem.Rating(themoviedb))</visible>
+					</control>
+					<control type="label">
+						<width>auto</width>
+						<height>48</height>
+						<aligny>center</aligny>
+						<font>t_title_s</font>
+						<textcolor>text_hi</textcolor>
+						<label>$INFO[ListItem.Rating(themoviedb)]</label>
+						<visible>!String.IsEmpty(ListItem.Rating(themoviedb))</visible>
+					</control>
+					<control type="image">
+						<left>18</left>
+						<top>11</top>
+						<width>26</width>
+						<height>26</height>
+						<texture colordiffuse="heart">trakt/icons/heart-filled.png</texture>
+						<visible>!String.IsEmpty(ListItem.UserRating)</visible>
+					</control>
+					<control type="label">
+						<width>auto</width>
+						<height>48</height>
+						<aligny>center</aligny>
+						<font>t_title_s</font>
+						<textcolor>text_hi</textcolor>
+						<label>$INFO[ListItem.UserRating]</label>
+						<visible>!String.IsEmpty(ListItem.UserRating)</visible>
+					</control>
+				</control>
+				<!-- Activity pill (Trakt shows "No activity" / your history here) -->
+				<control type="group">
+					<top>4</top>
+					<width>760</width>
+					<height>52</height>
+					<control type="image">
+						<width>330</width>
+						<height>48</height>
+						<texture colordiffuse="surface_hi" border="24">trakt/frames/pill48.png</texture>
+					</control>
+					<control type="label">
+						<left>24</left>
+						<width>290</width>
+						<height>48</height>
+						<aligny>center</aligny>
+						<font>t_label</font>
+						<textcolor>text_hi</textcolor>
+						<label>$VAR[TraktInfoActivity]</label>
+					</control>
+				</control>
+				<!-- Plot (focus opens the full text) -->
+				<control type="group">
+					<top>6</top>
+					<width>760</width>
+					<height>166</height>
+					<control type="button" id="138">
+						<left>-18</left>
+						<top>-10</top>
+						<width>796</width>
+						<height>176</height>
+						<label></label>
+						<texturefocus colordiffuse="accent" border="16">trakt/frames/ring14.png</texturefocus>
+						<texturenofocus />
+						<onclick condition="!String.IsEmpty(ListItem.Plot)">SetProperty(TextViewer_Header,$LOCALIZE[207],home)</onclick>
+						<onclick condition="!String.IsEmpty(ListItem.Plot)">SetProperty(TextViewer_Text,$ESCINFO[ListItem.Plot],home)</onclick>
+						<onclick condition="!String.IsEmpty(ListItem.Plot)">ActivateWindow(1102)</onclick>
+						<ondown>5000</ondown>
+						<onup>noop</onup>
+						<onleft>noop</onleft>
+						<onright>noop</onright>
+					</control>
+					<control type="textbox">
+						<width>760</width>
+						<height>156</height>
+						<font>t_body</font>
+						<textcolor>text_hi</textcolor>
+						<label fallback="19055">$INFO[ListItem.Plot]</label>
+						<autoscroll delay="10000" time="5000" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
+					</control>
+				</control>
+				<!-- Action bar -->
+				<control type="group">
+					<top>10</top>
+					<width>800</width>
+					<height>72</height>
+					<control type="grouplist" id="5000">
+						<width>800</width>
+						<height>72</height>
+						<orientation>horizontal</orientation>
+						<itemgap>12</itemgap>
+						<usecontrolcoords>true</usecontrolcoords>
+						<onup>138</onup>
+						<ondown>50</ondown>
+						<onleft>noop</onleft>
+						<onright>noop</onright>
+						<control type="radiobutton" id="8">
+							<width>230</width>
+							<height>72</height>
+							<label>$VAR[VideoInfoPlayButtonLabelVar]</label>
+							<font>t_button</font>
+							<textcolor>text_hi</textcolor>
+							<focusedcolor>text_hi</focusedcolor>
+							<textoffsetx>78</textoffsetx>
+							<aligny>center</aligny>
+							<texturefocus colordiffuse="accent_light" border="18">trakt/frames/rr16.png</texturefocus>
+							<texturenofocus colordiffuse="accent" border="18">trakt/frames/rr16.png</texturenofocus>
+							<radioposx>30</radioposx>
+							<radioposy>20</radioposy>
+							<radiowidth>32</radiowidth>
+							<radioheight>32</radioheight>
+							<selected>String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set)</selected>
+							<textureradioonfocus colordiffuse="text_hi">trakt/icons/folder.png</textureradioonfocus>
+							<textureradioonnofocus colordiffuse="text_hi">trakt/icons/folder.png</textureradioonnofocus>
+							<textureradioofffocus colordiffuse="text_hi">trakt/icons/play.png</textureradioofffocus>
+							<textureradiooffnofocus colordiffuse="text_hi">trakt/icons/play.png</textureradiooffnofocus>
+						</control>
+						<include content="TraktInfoIconButton">
+							<param name="id">120</param>
+							<param name="icon">trakt/icons/checks.png</param>
+							<param name="selected">Integer.IsGreater(ListItem.PlayCount,0)</param>
+							<param name="onclick_1_condition">!Integer.IsGreater(ListItem.PlayCount,0)</param>
+							<param name="onclick_1">RunPlugin(plugin://plugin.video.elementum/movie/$INFO[ListItem.UniqueID(tmdb)]/watched)</param>
+							<param name="onclick_2_condition">Integer.IsGreater(ListItem.PlayCount,0)</param>
+							<param name="onclick_2">RunPlugin(plugin://plugin.video.elementum/movie/$INFO[ListItem.UniqueID(tmdb)]/unwatched)</param>
+							<param name="visible">$EXP[info_is_elementum_movie]</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">121</param>
+							<param name="icon">trakt/icons/bookmark-plus.png</param>
+							<param name="onclick_1">RunPlugin(plugin://plugin.video.elementum/movie/$INFO[ListItem.UniqueID(tmdb)]/watchlist/add)</param>
+							<param name="visible">$EXP[info_is_elementum_movie] + $EXP[trakt_signed_in]</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">11</param>
+							<param name="icon">trakt/icons/trailer.png</param>
+							<param name="visible">!String.IsEmpty(ListItem.Trailer) + ![String.StartsWith(Container.FolderPath,plugin://) + String.Contains(Container.FolderPath,trailer)]</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">7</param>
+							<param name="icon">trakt/icons/heart.png</param>
+							<param name="visible">Control.IsEnabled(7)</param>
+							<param name="enable">String.IsEmpty(Container.PluginName) + !Container.Content(Sets)</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">13</param>
+							<param name="icon">trakt/icons/users.png</param>
+							<param name="visible">!String.IsEmpty(ListItem.Director)</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">14</param>
+							<param name="icon">trakt/icons/library.png</param>
+							<param name="visible">String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.DBID,0)</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">15</param>
+							<param name="icon">trakt/icons/video.png</param>
+							<param name="visible">String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.DBID,0)</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">10</param>
+							<param name="icon">trakt/icons/pictures.png</param>
+							<param name="visible">Control.IsEnabled(10)</param>
+						</include>
+						<include content="TraktInfoIconButton">
+							<param name="id">6</param>
+							<param name="icon">trakt/icons/refresh.png</param>
+							<param name="visible">Control.IsEnabled(6)</param>
+						</include>
+					</control>
+				</control>
+				<control type="label">
+					<width>760</width>
+					<height>30</height>
+					<font>t_small_m</font>
+					<textcolor>text_lo</textcolor>
+					<label>$VAR[TraktInfoTooltip]</label>
+					<visible>ControlGroup(5000).HasFocus + !Control.HasFocus(8)</visible>
+				</control>
+			</control>
+
+			<!-- ============================================================ Details card -->
+			<control type="group">
+				<left>1440</left>
+				<top>70</top>
+				<width>400</width>
+				<height>630</height>
+				<control type="image">
+					<texture colordiffuse="CC0F0E11" border="18">trakt/frames/rr16.png</texture>
+				</control>
+				<control type="label">
+					<left>32</left>
+					<top>22</top>
+					<width>336</width>
+					<height>44</height>
+					<font>t_title_s</font>
+					<textcolor>text_hi</textcolor>
+					<label>Details</label>
+				</control>
+				<control type="grouplist">
+					<left>32</left>
+					<top>78</top>
+					<width>336</width>
+					<height>530</height>
+					<orientation>vertical</orientation>
+					<itemgap>14</itemgap>
+					<include content="TraktInfoFact">
+						<param name="title">Tagline</param>
+						<param name="value">[I]$INFO[ListItem.Tagline][/I]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Tagline)</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">$VAR[FirstAiredLabel]</param>
+						<param name="value">$INFO[ListItem.Premiered]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Premiered)</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">Seasons</param>
+						<param name="value">$INFO[ListItem.Property(totalseasons)]$INFO[ListItem.Property(totalepisodes), • , episodes]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Property(totalseasons))</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">Studio</param>
+						<param name="value">$INFO[ListItem.Studio]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Studio)</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">Writer</param>
+						<param name="value">$INFO[ListItem.Writer]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Writer)</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">Country</param>
+						<param name="value">$INFO[ListItem.Country]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Country)</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">Collection</param>
+						<param name="value">$INFO[ListItem.Set]</param>
+						<param name="visible">!String.IsEmpty(ListItem.Set)</param>
+					</include>
+					<include content="TraktInfoFact">
+						<param name="title">Version</param>
+						<param name="value">$INFO[ListItem.VideoVersionName]</param>
+						<param name="visible">!String.IsEmpty(ListItem.VideoVersionName)</param>
+					</include>
+				</control>
+			</control>
+
+			<!-- ============================================================ Cast row -->
+			<control type="group">
+				<left>138</left>
+				<top>760</top>
+				<visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+				<include content="TraktSectionHeader">
+					<param name="label">$VAR[TraktCastHeader]</param>
+					<param name="list_id">50</param>
+					<param name="icon">trakt/icons/section.png</param>
+				</include>
+				<control type="panel" id="50">
+					<left>0</left>
+					<top>50</top>
+					<width>1782</width>
+					<height>262</height>
+					<orientation>horizontal</orientation>
+					<scrolltime tween="cubic" easing="out">300</scrolltime>
+					<onup>5000</onup>
+					<ondown>noop</ondown>
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<itemlayout width="156" height="262">
+						<include content="TraktCastCard" />
+					</itemlayout>
+					<focusedlayout width="156" height="262">
+						<include content="TraktCastCard">
+							<param name="focused">Control.HasFocus(50)</param>
+						</include>
+					</focusedlayout>
+				</control>
+			</control>
+		</control>
+		<include condition="Skin.HasSetting(touchmode)">TouchBackButton</include>
+	</controls>
+</window>

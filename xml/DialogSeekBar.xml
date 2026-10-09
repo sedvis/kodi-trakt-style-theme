@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trakt Style player: bottom panel shown while paused, seeking, with the OSD open or with info on.
+     Kodi-handled ids: 401 seek slider (VOD), 403 timeshift slider (Live TV). -->
+<window>
+	<visible>Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)</visible>
+	<visible>![Window.IsActive(sliderdialog) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide) | Window.IsActive(pvrguideinfo) | Window.IsActive(1110)]</visible>
+	<visible>Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | Player.Forwarding | Player.Rewinding | Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ShowTime | Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(playerprocessinfo) | !String.IsEmpty(Player.SeekNumeric) | !String.IsEmpty(PVR.ChannelNumberInput)</visible>
+	<depth>DepthOSD</depth>
+	<zorder>0</zorder>
+	<controls>
+		<include>PVRChannelNumberInput</include>
+		<control type="group">
+			<visible>!Player.HasGame</visible>
+			<animation type="WindowOpen" reversible="false">
+				<effect type="fade" start="0" end="100" time="250" />
+				<effect type="slide" start="0,60" end="0,0" time="300" tween="cubic" easing="out" />
+			</animation>
+			<animation type="WindowClose" reversible="false">
+				<effect type="fade" start="100" end="0" time="200" />
+				<effect type="slide" start="0,0" end="0,60" time="200" tween="cubic" easing="in" />
+			</animation>
+			<!-- Ink fade behind the panel -->
+			<control type="image">
+				<left>0</left>
+				<top>430</top>
+				<width>1920</width>
+				<height>650</height>
+				<texture colordiffuse="F20F0E11">trakt/gradients/bottom.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left>
+				<top>240</top>
+				<width>1920</width>
+				<height>840</height>
+				<texture colordiffuse="CC0F0E11">trakt/gradients/bottom.png</texture>
+				<visible>$EXP[player_info_mode]</visible>
+				<animation effect="fade" time="250">VisibleChange</animation>
+			</control>
+
+			<!-- Info mode (i): plot and what's next, above the now-playing block -->
+			<control type="group">
+				<left>200</left>
+				<top>584</top>
+				<visible>$EXP[player_info_mode] + !Window.IsVisible(playerprocessinfo)</visible>
+				<animation effect="fade" start="0" end="100" time="300" delay="150">Visible</animation>
+				<animation effect="fade" start="100" end="0" time="120">Hidden</animation>
+				<control type="label">
+					<width>1200</width>
+					<height>34</height>
+					<font>t_small_m</font>
+					<textcolor>accent_light</textcolor>
+					<label>$VAR[OSDNextLabelVar]</label>
+				</control>
+				<control type="textbox">
+					<top>40</top>
+					<width>1240</width>
+					<height>136</height>
+					<font>t_body</font>
+					<textcolor>text_mid</textcolor>
+					<label fallback="19055">$INFO[VideoPlayer.Tagline,[I],[/I][CR]]$INFO[VideoPlayer.Plot]</label>
+					<autoscroll delay="6000" repeat="8000" time="4000"></autoscroll>
+				</control>
+			</control>
+
+			<!-- Now playing -->
+			<control type="group">
+				<left>80</left>
+				<top>766</top>
+				<control type="image">
+					<width>96</width>
+					<height>144</height>
+					<texture colordiffuse="surface" border="10">trakt/frames/rr8.png</texture>
+				</control>
+				<control type="image">
+					<width>96</width>
+					<height>144</height>
+					<aspectratio>scale</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" diffuse="trakt/masks/poster-lg.png" fallback="DefaultVideo.png">$VAR[NowPlayingPosterVar]</texture>
+				</control>
+				<control type="label">
+					<left>124</left>
+					<top>4</top>
+					<width>1000</width>
+					<height>34</height>
+					<font>t_label_b</font>
+					<textcolor>accent_light</textcolor>
+					<label>$VAR[TraktPlayerKicker]</label>
+				</control>
+				<control type="label">
+					<left>124</left>
+					<top>36</top>
+					<width>1080</width>
+					<height>68</height>
+					<font>t_hero_s</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[TraktPlayerTitle]</label>
+				</control>
+				<control type="label">
+					<left>124</left>
+					<top>104</top>
+					<width>1080</width>
+					<height>38</height>
+					<font>t_body</font>
+					<textcolor>text_mid</textcolor>
+					<label>$VAR[TraktPlayerSubtitle]</label>
+				</control>
+			</control>
+
+			<!-- Right side: status and stream pills, end time -->
+			<control type="grouplist">
+				<right>80</right>
+				<top>794</top>
+				<width>900</width>
+				<height>40</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>10</itemgap>
+				<include content="TraktPlayerPill">
+					<param name="label">$VAR[TraktPlayerStatus]</param>
+					<param name="color">accent</param>
+					<param name="visible">!String.IsEmpty(Player.SeekNumeric) | !String.IsEmpty(Player.SeekStepSize) | [!String.IsEmpty(Player.SeekOffset) + Player.HasPerformedSeek(3)] | Player.Caching | Player.Paused | Player.Forwarding | Player.Rewinding | Player.IsTempo</param>
+				</include>
+				<include content="TraktPlayerPill">
+					<param name="label">$VAR[TraktPlayerResolution]</param>
+					<param name="visible">!String.IsEmpty(VideoPlayer.VideoResolution) + !$EXP[player_is_live]</param>
+				</include>
+				<include content="TraktPlayerPill">
+					<param name="label">$VAR[TraktPlayerHdr]</param>
+					<param name="visible">!String.IsEmpty(VideoPlayer.HdrType)</param>
+				</include>
+				<include content="TraktPlayerPill">
+					<param name="label">$VAR[TraktPlayerAudio]</param>
+					<param name="visible">!String.IsEmpty(VideoPlayer.AudioCodec)</param>
+				</include>
+				<include content="TraktPlayerPill">
+					<param name="label">[COLOR heart]●[/COLOR]  REC</param>
+					<param name="visible">[PVR.IsRecordingPlayingChannel + !Player.ChannelPreviewActive] | PVR.IsPlayingActiveRecording</param>
+				</include>
+			</control>
+			<control type="label">
+				<right>80</right>
+				<top>846</top>
+				<width>600</width>
+				<height>40</height>
+				<align>right</align>
+				<font>t_body</font>
+				<textcolor>text_mid</textcolor>
+				<label>$INFO[Player.FinishTime,Ends at [COLOR text_hi][B],[/B][/COLOR]]</label>
+				<visible>!String.IsEmpty(Player.Duration) + Player.HasVideo + !VideoPlayer.HasEpg</visible>
+			</control>
+			<control type="label">
+				<right>80</right>
+				<top>846</top>
+				<width>600</width>
+				<height>40</height>
+				<align>right</align>
+				<font>t_body</font>
+				<textcolor>text_mid</textcolor>
+				<label>$INFO[PVR.EpgEventFinishTime,Ends at [COLOR text_hi][B],[/B][/COLOR]]</label>
+				<visible>VideoPlayer.HasEpg</visible>
+			</control>
+
+			<!-- Progress row: VOD -->
+			<control type="group">
+				<visible>!$EXP[player_is_live]</visible>
+				<control type="label">
+					<left>80</left>
+					<top>930</top>
+					<width>150</width>
+					<height>40</height>
+					<aligny>center</aligny>
+					<font>t_label_b</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[TraktPlayerElapsed]</label>
+				</control>
+				<control type="group">
+					<left>240</left>
+					<top>944</top>
+					<width>1440</width>
+					<include content="TraktPlayerBar">
+						<param name="slider_id">401</param>
+					</include>
+				</control>
+				<control type="label">
+					<right>80</right>
+					<top>930</top>
+					<width>150</width>
+					<height>40</height>
+					<align>right</align>
+					<aligny>center</aligny>
+					<font>t_label_b</font>
+					<textcolor>text_hi</textcolor>
+					<label>$INFO[Player.TimeRemaining,-]</label>
+					<visible>!String.IsEmpty(Player.Duration)</visible>
+				</control>
+			</control>
+
+			<!-- Progress row: Live TV (Estuary's timeshift/EPG bars, drawn in the same place) -->
+			<control type="group">
+				<visible>$EXP[player_is_live]</visible>
+				<left>240</left>
+				<top>944</top>
+				<width>1440</width>
+				<control type="group">
+					<visible>Player.SeekEnabled + VideoPlayer.HasEPG</visible>
+					<include content="PVRProgress">
+						<param name="ts_bar_top" value="0"/>
+						<param name="epg_bar_top" value="6"/>
+						<param name="ts_bar_height" value="6"/>
+						<param name="epg_bar_height" value="6"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>Player.SeekEnabled + !VideoPlayer.HasEPG</visible>
+					<include content="PVRProgress">
+						<param name="ts_bar_top" value="0"/>
+						<param name="ts_bar_height" value="12"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>!Player.SeekEnabled + VideoPlayer.HasEPG</visible>
+					<include content="PVRProgress">
+						<param name="epg_bar_top" value="0"/>
+						<param name="epg_bar_height" value="12"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>!Player.SeekEnabled + !VideoPlayer.HasEPG</visible>
+					<include content="PVRProgress"/>
+				</control>
+				<control type="slider" id="403">
+					<left>-13</left>
+					<top>-7</top>
+					<width>1466</width>
+					<height>26</height>
+					<texturesliderbar colordiffuse="00FFFFFF">trakt/frames/sliderbar26.png</texturesliderbar>
+					<textureslidernib colordiffuse="text_hi">trakt/frames/nib.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="text_hi">trakt/frames/nib.png</textureslidernibfocus>
+					<visible>Player.SeekEnabled + !Player.ChannelPreviewActive</visible>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

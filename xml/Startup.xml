@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trakt Style: Home opens first and then (see Home.xml onload) Elementum's menu, so Back returns Home. -->
+<window>
+	<onload condition="$EXP[startup_elementum]">SetProperty(trakt_autostart,1,home)</onload>
+	<onload>ReplaceWindow($INFO[System.StartupWindow])</onload>
+	<controls />
+</window>

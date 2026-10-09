@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trakt Style: video player (seek bar, OSD, top strip). -->
+<includes>
+	<expression name="player_info_mode">Player.ShowInfo | Window.IsActive(fullscreeninfo)</expression>
+	<expression name="player_osd_open">Window.IsActive(videoosd) | Window.IsActive(musicosd)</expression>
+	<expression name="player_is_live">VideoPlayer.Content(LiveTV)</expression>
+
+	<variable name="TraktPlayerKicker">
+		<value condition="$EXP[player_is_live]">$INFO[VideoPlayer.ChannelNumberLabel,,  •  ]$INFO[VideoPlayer.ChannelName]</value>
+		<value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Season)">S$INFO[VideoPlayer.Season]  •  E$INFO[VideoPlayer.Episode]</value>
+		<value condition="VideoPlayer.Content(movies)">Movie$INFO[VideoPlayer.Year,  •  ]</value>
+		<value condition="!String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year]</value>
+		<value>Now playing</value>
+	</variable>
+	<variable name="TraktPlayerTitle">
+		<value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]</value>
+		<value condition="!String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
+		<value>$INFO[Player.Title]</value>
+	</variable>
+	<variable name="TraktPlayerSubtitle">
+		<value condition="$EXP[player_is_live]">$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, - ]$INFO[VideoPlayer.Genre,  •  ]</value>
+		<value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.OriginalTitle) + !String.IsEqual(VideoPlayer.OriginalTitle,VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.OriginalTitle]</value>
+		<value condition="VideoPlayer.Content(episodes)">$INFO[VideoPlayer.Title]</value>
+		<value condition="Player.ChapterCount">$INFO[Player.Chapter,Chapter ]$INFO[Player.ChapterCount, of ]$INFO[Player.ChapterName,  •  ]</value>
+		<value>$INFO[VideoPlayer.Genre]</value>
+	</variable>
+	<variable name="TraktPlayerStatus">
+		<value condition="!String.IsEmpty(Player.SeekNumeric)">Go to $INFO[Player.SeekNumeric(hh:mm:ss)]</value>
+		<value condition="!String.IsEmpty(Player.SeekStepSize)">Skip $INFO[Player.SeekStepSize]</value>
+		<value condition="!String.IsEmpty(Player.SeekOffset) + Player.HasPerformedSeek(3)">Skip $INFO[Player.SeekOffset]</value>
+		<value condition="Player.Caching">Buffering $INFO[Player.CacheLevel,,%]</value>
+		<value condition="Player.Paused">Paused</value>
+		<value condition="Player.Forwarding">Fast forward $INFO[Player.PlaySpeed,,x]</value>
+		<value condition="Player.Rewinding">Rewind $INFO[Player.PlaySpeed,,x]</value>
+		<value condition="Player.IsTempo">Speed $INFO[Player.PlaySpeed,,x]</value>
+	</variable>
+	<variable name="TraktPlayerElapsed">
+		<value condition="!String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekNumeric(hh:mm:ss)]</value>
+		<value condition="Player.Seeking | Player.HasPerformedSeek(1)">$INFO[Player.SeekTime]</value>
+		<value>$INFO[Player.Time]</value>
+	</variable>
+	<variable name="TraktPlayerResolution">
+		<value condition="String.IsEqual(VideoPlayer.VideoResolution,4K) | String.IsEqual(VideoPlayer.VideoResolution,8K)">$INFO[VideoPlayer.VideoResolution]</value>
+		<value condition="String.IsEqual(VideoPlayer.VideoResolution,SD)">SD</value>
+		<value>$INFO[VideoPlayer.VideoResolution,,p]</value>
+	</variable>
+	<variable name="TraktPlayerHdr">
+		<value condition="String.IsEqual(VideoPlayer.HdrType,dolbyvision)">Dolby Vision</value>
+		<value condition="String.IsEqual(VideoPlayer.HdrType,hdr10)">HDR10</value>
+		<value condition="String.IsEqual(VideoPlayer.HdrType,hdr10plus)">HDR10+</value>
+		<value condition="String.IsEqual(VideoPlayer.HdrType,hlg)">HLG</value>
+		<value>[UPPERCASE]$INFO[VideoPlayer.HdrType][/UPPERCASE]</value>
+	</variable>
+	<variable name="TraktPlayerAudio">
+		<value>[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]$INFO[VideoPlayer.AudioChannels,  ,ch]</value>
+	</variable>
+
+	<!-- Text pill sized to its label (a disabled button: auto width, pill background). -->
+	<include name="TraktPlayerPill">
+		<param name="color">33FFFFFF</param>
+		<param name="visible">true</param>
+		<definition>
+			<control type="button">
+				<width>auto</width>
+				<height>40</height>
+				<textoffsetx>20</textoffsetx>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>t_badge</font>
+				<disabledcolor>text_hi</disabledcolor>
+				<textcolor>text_hi</textcolor>
+				<texturenofocus colordiffuse="$PARAM[color]" border="20">trakt/frames/pill40.png</texturenofocus>
+				<texturefocus colordiffuse="$PARAM[color]" border="20">trakt/frames/pill40.png</texturefocus>
+				<label>$PARAM[label]</label>
+				<enable>false</enable>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Thick rounded progress bar with cache, chapters, edit list and the seek nib (slider id). -->
+	<include name="TraktPlayerBar">
+		<param name="slider_id">401</param>
+		<definition>
+			<control type="progress">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>12</height>
+				<info>Player.ProgressCache</info>
+				<texturebg colordiffuse="2EFFFFFF" border="6">trakt/frames/pill12.png</texturebg>
+				<midtexture colordiffuse="4DFFFFFF" border="6">trakt/frames/pill12.png</midtexture>
+			</control>
+			<control type="progress">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>12</height>
+				<info>Player.Progress</info>
+				<texturebg colordiffuse="00FFFFFF" border="6">trakt/frames/pill12.png</texturebg>
+				<midtexture colordiffuse="accent" border="6">trakt/frames/pill12.png</midtexture>
+			</control>
+			<control type="ranges">
+				<left>0</left>
+				<top>2</top>
+				<width>100%</width>
+				<height>8</height>
+				<texturebg colordiffuse="00FFFFFF">trakt/frames/white.png</texturebg>
+				<lefttexture colordiffuse="99FFFFFF">trakt/frames/tick.png</lefttexture>
+				<midtexture colordiffuse="heart">trakt/frames/white.png</midtexture>
+				<righttexture colordiffuse="99FFFFFF">trakt/frames/tick.png</righttexture>
+				<info>Player.Editlist</info>
+			</control>
+			<control type="ranges">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>12</height>
+				<texturebg colordiffuse="00FFFFFF">trakt/frames/white.png</texturebg>
+				<righttexture colordiffuse="E617141A">trakt/frames/tick.png</righttexture>
+				<info>Player.Chapters</info>
+			</control>
+			<control type="ranges">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>12</height>
+				<texturebg colordiffuse="00FFFFFF">trakt/frames/white.png</texturebg>
+				<righttexture colordiffuse="E617141A">trakt/frames/tick.png</righttexture>
+				<info>Player.SceneMarkers</info>
+			</control>
+			<control type="ranges">
+				<left>0</left>
+				<top>14</top>
+				<width>100%</width>
+				<height>4</height>
+				<texturebg colordiffuse="00FFFFFF">trakt/frames/white.png</texturebg>
+				<righttexture colordiffuse="heart">trakt/frames/tick.png</righttexture>
+				<info>Player.Cuts</info>
+			</control>
+			<control type="slider" id="$PARAM[slider_id]">
+				<left>-13</left>
+				<top>-7</top>
+				<width>1466</width>
+				<height>26</height>
+				<texturesliderbar colordiffuse="00FFFFFF">trakt/frames/sliderbar26.png</texturesliderbar>
+				<textureslidernib colordiffuse="text_hi">trakt/frames/nib.png</textureslidernib>
+				<textureslidernibfocus colordiffuse="text_hi">trakt/frames/nib.png</textureslidernibfocus>
+				<visible>Player.SeekEnabled + [Player.Seeking | Player.HasPerformedSeek(3) | Player.Paused | !String.IsEmpty(Player.SeekNumeric)]</visible>
+			</control>
+		</definition>
+	</include>
+</includes>

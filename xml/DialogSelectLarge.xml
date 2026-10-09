@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Elementum's stream picker ("links" dialog). Kodi prefers this file over Elementum's own when the
+     skin provides it. Control ids are fixed by Elementum: 32500 close, 32501 title, 32502 scrollbar,
+     32503 list (label = torrent name, label2 = size/seeds/provider, icon = provider). -->
+<window>
+	<defaultcontrol always="true">32503</defaultcontrol>
+	<controls>
+		<control type="image">
+			<left>-100</left>
+			<top>-100</top>
+			<width>2120</width>
+			<height>1280</height>
+			<texture colordiffuse="E60F0E11">trakt/frames/white.png</texture>
+			<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+		</control>
+		<control type="group">
+			<centerleft>50%</centerleft>
+			<centertop>50%</centertop>
+			<width>1440</width>
+			<height>900</height>
+			<animation type="WindowOpen" reversible="false">
+				<effect type="fade" start="0" end="100" time="220" />
+				<effect type="slide" start="0,30" end="0,0" time="260" tween="cubic" easing="out" />
+			</animation>
+			<animation type="WindowClose" reversible="false">
+				<effect type="fade" start="100" end="0" time="160" />
+			</animation>
+			<control type="image">
+				<texture colordiffuse="surface" border="26">trakt/frames/rr24.png</texture>
+			</control>
+			<control type="image">
+				<width>1440</width>
+				<height>420</height>
+				<texture colordiffuse="accent_deep">trakt/gradients/glow-tl.png</texture>
+				<animation effect="fade" start="100" end="70" time="0" condition="true">Conditional</animation>
+			</control>
+			<!-- Header -->
+			<control type="image">
+				<left>48</left>
+				<top>42</top>
+				<width>44</width>
+				<height>44</height>
+				<texture colordiffuse="accent">trakt/frames/circle.png</texture>
+			</control>
+			<control type="image">
+				<left>58</left>
+				<top>52</top>
+				<width>24</width>
+				<height>24</height>
+				<texture colordiffuse="text_hi">trakt/icons/magnet.png</texture>
+			</control>
+			<control type="label">
+				<left>110</left>
+				<top>26</top>
+				<width>1180</width>
+				<height>40</height>
+				<font>t_small_m</font>
+				<textcolor>accent_light</textcolor>
+				<label>Elementum</label>
+			</control>
+			<control type="label" id="32501">
+				<left>110</left>
+				<top>60</top>
+				<width>1180</width>
+				<height>50</height>
+				<font>t_title</font>
+				<textcolor>text_hi</textcolor>
+				<scroll>true</scroll>
+			</control>
+			<control type="button" id="32500">
+				<left>1352</left>
+				<top>38</top>
+				<width>52</width>
+				<height>52</height>
+				<label></label>
+				<texturefocus colordiffuse="accent">trakt/frames/circle.png</texturefocus>
+				<texturenofocus colordiffuse="surface_hi">trakt/frames/circle.png</texturenofocus>
+				<onleft>32503</onleft>
+				<onright>32503</onright>
+				<onup>32503</onup>
+				<ondown>32503</ondown>
+			</control>
+			<control type="image">
+				<left>1366</left>
+				<top>52</top>
+				<width>24</width>
+				<height>24</height>
+				<texture colordiffuse="text_hi">trakt/icons/close.png</texture>
+			</control>
+			<control type="image">
+				<left>48</left>
+				<top>126</top>
+				<width>1344</width>
+				<height>2</height>
+				<texture colordiffuse="surface_line">trakt/frames/white.png</texture>
+			</control>
+			<!-- Streams -->
+			<control type="list" id="32503">
+				<left>36</left>
+				<top>144</top>
+				<width>1340</width>
+				<height>720</height>
+				<onup>32503</onup>
+				<ondown>32503</ondown>
+				<onleft>32500</onleft>
+				<onright>32502</onright>
+				<pagecontrol>32502</pagecontrol>
+				<scrolltime tween="cubic" easing="out">250</scrolltime>
+				<itemlayout height="96" width="1340">
+					<control type="image">
+						<left>12</left>
+						<top>4</top>
+						<width>1316</width>
+						<height>88</height>
+						<texture colordiffuse="ink" border="18">trakt/frames/rr16.png</texture>
+					</control>
+					<control type="image">
+						<left>32</left>
+						<top>20</top>
+						<width>56</width>
+						<height>56</height>
+						<aspectratio>keep</aspectratio>
+						<texture diffuse="trakt/masks/square.png">$INFO[ListItem.Icon]</texture>
+					</control>
+					<control type="label">
+						<left>112</left>
+						<top>14</top>
+						<width>1190</width>
+						<height>36</height>
+						<font>t_label_b</font>
+						<textcolor>text_hi</textcolor>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+					<control type="label">
+						<left>112</left>
+						<top>50</top>
+						<width>1190</width>
+						<height>32</height>
+						<font>t_small</font>
+						<textcolor>text_lo</textcolor>
+						<label>$INFO[ListItem.Label2]</label>
+					</control>
+				</itemlayout>
+				<focusedlayout height="96" width="1340">
+					<control type="image">
+						<left>12</left>
+						<top>4</top>
+						<width>1316</width>
+						<height>88</height>
+						<texture colordiffuse="surface_hi" border="18">trakt/frames/rr16.png</texture>
+					</control>
+					<control type="image">
+						<left>7</left>
+						<top>-1</top>
+						<width>1326</width>
+						<height>98</height>
+						<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+						<visible>Control.HasFocus(32503)</visible>
+					</control>
+					<control type="image">
+						<left>32</left>
+						<top>20</top>
+						<width>56</width>
+						<height>56</height>
+						<aspectratio>keep</aspectratio>
+						<texture diffuse="trakt/masks/square.png">$INFO[ListItem.Icon]</texture>
+					</control>
+					<control type="label">
+						<left>112</left>
+						<top>14</top>
+						<width>1150</width>
+						<height>36</height>
+						<font>t_label_b</font>
+						<textcolor>text_hi</textcolor>
+						<scroll>true</scroll>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+					<control type="label">
+						<left>112</left>
+						<top>50</top>
+						<width>1150</width>
+						<height>32</height>
+						<font>t_small</font>
+						<textcolor>text_mid</textcolor>
+						<scroll>true</scroll>
+						<label>$INFO[ListItem.Label2]</label>
+					</control>
+					<control type="image">
+						<left>1270</left>
+						<top>30</top>
+						<width>36</width>
+						<height>36</height>
+						<texture colordiffuse="accent_light">trakt/icons/play.png</texture>
+						<visible>Control.HasFocus(32503)</visible>
+					</control>
+				</focusedlayout>
+			</control>
+			<control type="scrollbar" id="32502">
+				<left>1392</left>
+				<top>150</top>
+				<width>8</width>
+				<height>710</height>
+				<onleft>32503</onleft>
+				<onup>32500</onup>
+				<texturesliderbackground colordiffuse="ink" border="4">trakt/frames/rr8.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="surface_line" border="4">trakt/frames/rr8.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="accent" border="4">trakt/frames/rr8.png</texturesliderbarfocus>
+				<showonepage>false</showonepage>
+				<orientation>vertical</orientation>
+			</control>
+		</control>
+	</controls>
+</window>

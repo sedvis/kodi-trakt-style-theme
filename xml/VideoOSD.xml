@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Trakt Style player controls. Button ids/actions are Estuary's (600-608 transport, 804 and 7004x tools,
+     87 + sliders for seeking on the bar); only the look and layout changed. -->
+<window>
+	<onload condition="!Player.PauseEnabled">SetFocus(603)</onload>
+	<defaultcontrol always="true">602</defaultcontrol>
+	<depth>DepthOSD</depth>
+	<controls>
+		<control type="button">
+			<description>background close area</description>
+			<left>0</left>
+			<top>0</top>
+			<width>100%</width>
+			<bottom>200</bottom>
+			<texturefocus />
+			<texturenofocus />
+			<onclick>Action(close)</onclick>
+		</control>
+		<include condition="Skin.HasSetting(touchmode)">TouchBackOSDButton</include>
+		<control type="group">
+			<bottom>0</bottom>
+			<height>1080</height>
+			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(1110) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(VideoBookmarks) | Window.IsVisible(playerprocessinfo) | Window.IsVisible(osdcmssettings) | Window.IsVisible(PVROSDChannels) | Window.IsVisible(pvrchannelguide)]</visible>
+			<animation effect="fade" time="200">VisibleChange</animation>
+			<animation type="WindowOpen" reversible="false">
+				<effect type="fade" start="0" end="100" time="250" />
+				<effect type="slide" start="0,40" end="0,0" time="300" tween="cubic" easing="out" />
+			</animation>
+			<animation type="WindowClose" reversible="false">
+				<effect type="fade" start="100" end="0" time="200" />
+			</animation>
+			<!-- Focused button name -->
+			<control type="label">
+				<left>80</left>
+				<top>992</top>
+				<width>560</width>
+				<height>56</height>
+				<aligny>center</aligny>
+				<font>t_label</font>
+				<textcolor>text_mid</textcolor>
+				<label>$VAR[OSDHelpTextVar]</label>
+			</control>
+			<control type="group" id="200">
+				<!-- Transport, centred -->
+				<control type="grouplist" id="201">
+					<left>0</left>
+					<top>978</top>
+					<width>1920</width>
+					<height>100</height>
+					<align>center</align>
+					<itemgap>18</itemgap>
+					<orientation>horizontal</orientation>
+					<usecontrolcoords>true</usecontrolcoords>
+					<onup>87</onup>
+					<ondown>noop</ondown>
+					<onleft>202</onleft>
+					<onright>202</onright>
+					<control type="radiobutton" id="600">
+						<top>10</top>
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-prev.png"/>
+						</include>
+						<onclick>PlayerControl(Previous)</onclick>
+						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | [Player.SeekEnabled + VideoPlayer.Content(livetv)]</visible>
+					</control>
+					<control type="radiobutton" id="601">
+						<top>10</top>
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-rew.png"/>
+						</include>
+						<onclick condition="Player.Paused">PlayerControl(Play)</onclick>
+						<onclick condition="!Player.Paused">PlayerControl(Rewind)</onclick>
+						<visible>Player.SeekEnabled + !VideoPlayer.Content(livetv)</visible>
+					</control>
+					<control type="group" id="698">
+						<top>0</top>
+						<width>84</width>
+						<height>84</height>
+						<visible>Player.PauseEnabled</visible>
+						<control type="button" id="602">
+							<width>84</width>
+							<height>84</height>
+							<label></label>
+							<font></font>
+							<texturefocus colordiffuse="accent">trakt/frames/circle.png</texturefocus>
+							<texturenofocus colordiffuse="text_hi">trakt/frames/circle.png</texturenofocus>
+							<onleft>601</onleft>
+							<onright>603</onright>
+							<onup>87</onup>
+							<ondown>noop</ondown>
+							<onclick>PlayerControl(Play)</onclick>
+						</control>
+						<control type="image">
+							<left>22</left>
+							<top>22</top>
+							<width>40</width>
+							<height>40</height>
+							<texture colordiffuse="text_hi">$VAR[PlayerControlsPlayImageVar]</texture>
+							<visible>Control.HasFocus(602)</visible>
+						</control>
+						<control type="image">
+							<left>22</left>
+							<top>22</top>
+							<width>40</width>
+							<height>40</height>
+							<texture colordiffuse="ink">$VAR[PlayerControlsPlayImageVar]</texture>
+							<visible>!Control.HasFocus(602)</visible>
+						</control>
+						<control type="image">
+							<left>-6</left>
+							<top>-6</top>
+							<width>96</width>
+							<height>96</height>
+							<texture colordiffuse="accent_glow">trakt/frames/circle-ring.png</texture>
+							<visible>Control.HasFocus(602)</visible>
+						</control>
+					</control>
+					<control type="radiobutton" id="603">
+						<top>10</top>
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-stop.png"/>
+						</include>
+						<onclick>PlayerControl(Stop)</onclick>
+					</control>
+					<control type="radiobutton" id="606">
+						<top>10</top>
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-ff.png"/>
+						</include>
+						<onclick condition="Player.Paused">PlayerControl(Play)</onclick>
+						<onclick condition="!Player.Paused">PlayerControl(Forward)</onclick>
+						<visible>Player.SeekEnabled + !VideoPlayer.Content(livetv)</visible>
+					</control>
+					<control type="radiobutton" id="607">
+						<top>10</top>
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-next.png"/>
+						</include>
+						<onclick>PlayerControl(Next)</onclick>
+						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | PVR.IsTimeShift</visible>
+					</control>
+					<control type="radiobutton" id="608">
+						<top>10</top>
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-record.png"/>
+						</include>
+						<selected>!PVR.IsRecordingPlayingChannel</selected>
+						<onclick>PVR.ToggleRecordPlayingChannel</onclick>
+						<visible>PVR.CanRecordPlayingChannel</visible>
+						<visible>VideoPlayer.Content(livetv)</visible>
+					</control>
+				</control>
+				<!-- Tools, right -->
+				<control type="grouplist" id="202">
+					<right>80</right>
+					<top>988</top>
+					<width>760</width>
+					<height>64</height>
+					<align>right</align>
+					<itemgap>14</itemgap>
+					<orientation>horizontal</orientation>
+					<onup>87</onup>
+					<ondown condition="Control.HasFocus(70043)">11104</ondown>
+					<ondown condition="Control.HasFocus(704)">12104</ondown>
+					<ondown condition="Control.HasFocus(255)">13103</ondown>
+					<onleft>201</onleft>
+					<onright>201</onright>
+					<control type="radiobutton" id="804">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-menu.png"/>
+						</include>
+						<onclick>PlayerControl(ShowVideoMenu)</onclick>
+						<visible>VideoPlayer.HasMenu</visible>
+					</control>
+					<control type="radiobutton" id="70040">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-channels.png"/>
+						</include>
+						<onclick>Dialog.Close(VideoOSD)</onclick>
+						<onclick>ActivateWindow(PVROSDChannels)</onclick>
+						<visible>VideoPlayer.Content(livetv)</visible>
+					</control>
+					<control type="radiobutton" id="70041">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-guide.png"/>
+						</include>
+						<onclick>Dialog.Close(VideoOSD)</onclick>
+						<onclick>ActivateWindow(pvrchannelguide)</onclick>
+						<visible>VideoPlayer.Content(livetv) + VideoPlayer.HasEPG</visible>
+					</control>
+					<control type="radiobutton" id="70042">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-playlist.png"/>
+						</include>
+						<onclick>Dialog.Close(all, true)</onclick>
+						<onclick>ActivateWindow(videoplaylist)</onclick>
+						<visible>Integer.IsGreater(Playlist.Length(video),1)</visible>
+					</control>
+					<control type="radiobutton" id="70043">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-info.png"/>
+						</include>
+						<onclick>Info</onclick>
+					</control>
+					<control type="radiobutton" id="70044">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-bookmarks.png"/>
+						</include>
+						<onclick>ActivateWindow(videobookmarks)</onclick>
+						<visible>!VideoPlayer.Content(livetv)</visible>
+					</control>
+					<control type="radiobutton" id="70045">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-teletext.png"/>
+						</include>
+						<onclick>Dialog.Close(VideoOSD)</onclick>
+						<onclick>ActivateWindow(Teletext)</onclick>
+						<visible>VideoPlayer.HasTeletext</visible>
+					</control>
+					<control type="radiobutton" id="70046">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-subtitles.png"/>
+						</include>
+						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
+						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+					</control>
+					<control type="radiobutton" id="70047">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-3d.png"/>
+						</include>
+						<visible>VideoPlayer.IsStereoscopic</visible>
+						<onclick>SetProperty(settingslist_content,3d,home)</onclick>
+						<onclick>SetProperty(settingslist_header,$LOCALIZE[36501],home)</onclick>
+						<onclick>ActivateWindow(1101)</onclick>
+					</control>
+					<control type="radiobutton" id="70048">
+						<include content="OSDButton">
+							<param name="texture" value="trakt/icons/osd-settings.png"/>
+						</include>
+						<onclick>SetProperty(settingslist_content,osd,home)</onclick>
+						<onclick>SetProperty(settingslist_header,$LOCALIZE[5],home)</onclick>
+						<onclick>ActivateWindow(1101)</onclick>
+					</control>
+				</control>
+			</control>
+			<!-- Seeking on the bar (up from the buttons): same position as the seek bar's progress -->
+			<control type="group" id="6000">
+				<left>240</left>
+				<top>944</top>
+				<width>1440</width>
+				<visible>Player.SeekEnabled</visible>
+				<control type="button" id="87">
+					<include>HiddenObject</include>
+					<onup>200</onup>
+					<ondown>200</ondown>
+					<onleft>StepBack</onleft>
+					<onright condition="!Player.Paused">StepForward</onright>
+					<onright condition="Player.Paused">PlayerControl(FrameAdvance(1))</onright>
+				</control>
+				<control type="image">
+					<left>-10</left>
+					<top>-10</top>
+					<width>1460</width>
+					<height>32</height>
+					<texture colordiffuse="accent" border="16">trakt/frames/pill32-ring.png</texture>
+					<visible>Control.HasFocus(87)</visible>
+				</control>
+				<control type="slider">
+					<left>-13</left>
+					<top>-7</top>
+					<width>1466</width>
+					<height>26</height>
+					<texturesliderbar colordiffuse="00FFFFFF">trakt/frames/sliderbar26.png</texturesliderbar>
+					<textureslidernib colordiffuse="text_hi">trakt/frames/nib.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="accent_light">trakt/frames/nib-lg.png</textureslidernibfocus>
+					<info>Player.Progress</info>
+					<onup>200</onup>
+					<ondown>200</ondown>
+					<action>seek</action>
+					<visible>!VideoPlayer.Content(LiveTV)</visible>
+				</control>
+				<control type="slider">
+					<left>-13</left>
+					<top>-7</top>
+					<width>1466</width>
+					<height>26</height>
+					<texturesliderbar colordiffuse="00FFFFFF">trakt/frames/sliderbar26.png</texturesliderbar>
+					<textureslidernib colordiffuse="text_hi">trakt/frames/nib.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="accent_light">trakt/frames/nib-lg.png</textureslidernibfocus>
+					<info>PVR.TimeshiftProgressPlayPos</info>
+					<onup>200</onup>
+					<ondown>200</ondown>
+					<action>pvr.seek</action>
+					<visible>VideoPlayer.Content(LiveTV)</visible>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

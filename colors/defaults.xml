@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trakt Style palette, taken from Trakt's own design tokens (purple-500 accent on shade-920 ink). -->
+<colors>
+	<!-- Estuary names (used across the stock windows) -->
+	<color name="primary_background">FF17141A</color>
+	<color name="secondary_background">00000000</color>
+	<color name="dialog_tint">FF201E23</color>
+	<color name="background">FF17141A</color>
+	<color name="bg_image">FF909090</color>
+	<color name="bg_overlay">1AFFFFFF</color>
+	<color name="black">FF000000</color>
+	<color name="white">FFFCFBFE</color>
+	<color name="grey">FF96949C</color>
+	<color name="blue">FFC580E6</color>
+	<color name="red">FFDA524F</color>
+	<color name="button_focus">FF9F42C6</color>
+	<color name="button_alt_focus">809F42C6</color>
+	<color name="text_shadow">22000000</color>
+	<color name="border_alpha">40FFFFFF</color>
+	<color name="disabled">40FFFFFF</color>
+	<color name="selected">FFC580E6</color>
+	<color name="invalid">FFDA524F</color>
+	<!-- Trakt Style names -->
+	<color name="ink">FF17141A</color>
+	<color name="ink_deep">FF0F0E11</color>
+	<color name="surface">FF201E23</color>
+	<color name="surface_hi">FF2F2D33</color>
+	<color name="surface_line">FF434148</color>
+	<color name="text_hi">FFFCFBFE</color>
+	<color name="text_mid">FFB8B6BE</color>
+	<color name="text_lo">FF96949C</color>
+	<color name="text_dim">FF67646D</color>
+	<color name="accent">FF9F42C6</color>
+	<color name="accent_light">FFC580E6</color>
+	<color name="accent_soft">FFDCABF4</color>
+	<color name="accent_deep">FF3F1251</color>
+	<color name="accent_glow">669F42C6</color>
+	<color name="heart">FFDA524F</color>
+	<color name="gold">FFDCA81D</color>
+	<color name="good">FF0FA972</color>
+	<color name="info">FF2299EA</color>
+	<color name="overlay_card">CC0F0E11</color>
+	<color name="overlay_bg">E617141A</color>
+</colors>

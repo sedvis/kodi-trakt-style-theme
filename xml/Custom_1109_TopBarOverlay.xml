@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Trakt Style player: top strip (show logo or title, clock). Shown whenever the seek bar panel is. -->
+<window type="dialog" id="1109">
+	<visible>Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)</visible>
+	<visible>Window.IsActive(seekbar) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide)</visible>
+	<depth>DepthOSD</depth>
+	<zorder>0</zorder>
+	<controls>
+		<control type="group">
+			<animation type="WindowOpen" reversible="false">
+				<effect type="fade" start="0" end="100" time="250" />
+				<effect type="slide" start="0,-40" end="0,0" time="300" tween="cubic" easing="out" />
+			</animation>
+			<animation type="WindowClose" reversible="false">
+				<effect type="fade" start="100" end="0" time="200" />
+			</animation>
+			<animation effect="slide" end="0,-240" time="300" tween="sine" easing="inout" condition="$EXP[infodialog_active]">Conditional</animation>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>1920</width>
+				<height>260</height>
+				<texture colordiffuse="D90F0E11">trakt/gradients/top.png</texture>
+			</control>
+			<!-- Logo, or the title as text when there is no logo -->
+			<control type="image">
+				<left>80</left>
+				<top>40</top>
+				<width>420</width>
+				<height>130</height>
+				<aspectratio aligny="top" align="left">keep</aspectratio>
+				<fadetime>200</fadetime>
+				<texture>$VAR[PlayerClearLogoVar]</texture>
+				<visible>!String.IsEmpty(Player.Art(tvshow.clearlogo)) | !String.IsEmpty(Player.Art(clearlogo))</visible>
+			</control>
+			<control type="group">
+				<left>80</left>
+				<top>44</top>
+				<visible>String.IsEmpty(Player.Art(tvshow.clearlogo)) + String.IsEmpty(Player.Art(clearlogo))</visible>
+				<visible>!Window.IsActive(pvrosdchannels) + !Window.IsActive(pvrchannelguide)</visible>
+				<control type="image">
+					<width>36</width>
+					<height>36</height>
+					<texture colordiffuse="accent">trakt/frames/circle.png</texture>
+				</control>
+				<control type="image">
+					<left>8</left>
+					<top>8</top>
+					<width>20</width>
+					<height>20</height>
+					<texture colordiffuse="text_hi">trakt/icons/osd-play-filled.png</texture>
+				</control>
+				<control type="label">
+					<left>52</left>
+					<width>1100</width>
+					<height>36</height>
+					<aligny>center</aligny>
+					<font>t_label_b</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[NowPlayingBreadcrumbsVar]</label>
+				</control>
+			</control>
+			<!-- Clock -->
+			<control type="label">
+				<right>80</right>
+				<top>26</top>
+				<width>500</width>
+				<height>80</height>
+				<align>right</align>
+				<aligny>center</aligny>
+				<font>font_clock</font>
+				<textcolor>text_hi</textcolor>
+				<label>$INFO[System.Time]</label>
+				<visible>!Window.IsVisible(extendedprogressdialog)</visible>
+			</control>
+			<control type="grouplist">
+				<right>80</right>
+				<top>106</top>
+				<width>600</width>
+				<height>40</height>
+				<align>right</align>
+				<itemgap>12</itemgap>
+				<orientation>horizontal</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<visible>!Window.IsVisible(extendedprogressdialog)</visible>
+				<control type="image">
+					<top>6</top>
+					<width>28</width>
+					<height>28</height>
+					<texture colordiffuse="heart">trakt/icons/osd-volume-mute.png</texture>
+					<visible>Player.Muted</visible>
+				</control>
+				<control type="label">
+					<width>auto</width>
+					<height>40</height>
+					<aligny>center</aligny>
+					<font>t_small_m</font>
+					<textcolor>text_mid</textcolor>
+					<label>$INFO[System.AlarmPos,,  •  ]</label>
+					<visible>System.HasAlarm(shutdowntimer)</visible>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

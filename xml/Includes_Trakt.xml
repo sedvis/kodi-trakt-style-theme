@@ -1,0 +1,1278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trakt Style: shared building blocks (expressions, art variables, cards, rows, pills). -->
+<includes>
+	<!-- ===================================================================== Expressions -->
+	<expression name="elementum_on">System.AddonIsEnabled(plugin.video.elementum)</expression>
+	<expression name="trakt_signed_in">System.AddonIsEnabled(plugin.video.elementum) + !String.IsEmpty(Addon.SettingStr(plugin.video.elementum,trakt_token)) + !Skin.HasSetting(home_hide_personal)</expression>
+	<expression name="home_mode_media">!String.IsEqual(Skin.String(home_mode),shows) + !String.IsEqual(Skin.String(home_mode),movies)</expression>
+	<expression name="home_mode_shows">String.IsEqual(Skin.String(home_mode),shows)</expression>
+	<expression name="home_mode_movies">String.IsEqual(Skin.String(home_mode),movies)</expression>
+	<expression name="startup_elementum">System.AddonIsEnabled(plugin.video.elementum) + !String.IsEqual(Skin.String(startup_target),home)</expression>
+	<!-- Kodi consumes the "specialsort" property, so Elementum's "Next page" item is recognised by its nextpage.png thumbnail. -->
+	<expression name="item_is_nextpage">String.EndsWith(ListItem.Art(thumb),nextpage.png) | String.EndsWith(ListItem.Icon,nextpage.png)</expression>
+	<expression name="item_is_episode">String.IsEqual(ListItem.DBType,episode)</expression>
+
+	<constant name="trakt_content_left">150</constant>
+
+	<!-- ===================================================================== Art & label variables -->
+	<variable name="TraktPosterArt">
+		<value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshowposter))">$INFO[ListItem.Art(tvshowposter)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value>$INFO[ListItem.Icon]</value>
+	</variable>
+	<variable name="TraktLandscapeArt">
+		<value condition="$EXP[item_is_episode] + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+		<value>$INFO[ListItem.Art(thumb)]</value>
+	</variable>
+	<variable name="TraktCardTitle">
+		<value condition="$EXP[item_is_episode] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<variable name="TraktCardSubtitle">
+		<value condition="$EXP[item_is_episode] + Integer.IsGreater(ListItem.DBID,0)">S$INFO[ListItem.Season] • E$INFO[ListItem.Episode]$INFO[ListItem.Title, - ]</value>
+		<value condition="$EXP[item_is_episode] + !String.IsEmpty(ListItem.OriginalTitle)">S$INFO[ListItem.Season] • E$INFO[ListItem.Episode]$INFO[ListItem.OriginalTitle, - ]</value>
+		<value condition="$EXP[item_is_episode]">S$INFO[ListItem.Season] • E$INFO[ListItem.Episode]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow)">TV Show$INFO[ListItem.Year, • ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,movie)">Movie$INFO[ListItem.Year, • ]</value>
+		<value>$INFO[ListItem.Label2]</value>
+	</variable>
+	<variable name="TraktEpisodeTitle">
+		<value condition="Integer.IsGreater(ListItem.DBID,0) | String.IsEmpty(ListItem.OriginalTitle)">$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.OriginalTitle]</value>
+	</variable>
+	<variable name="TraktEpisodeSubtitle">
+		<value condition="$EXP[item_is_episode]">S$INFO[ListItem.Season] • E$INFO[ListItem.Episode]$INFO[ListItem.Premiered,  •  ]</value>
+		<value>$INFO[ListItem.Label2]</value>
+	</variable>
+	<variable name="TraktPosterStatPlain">
+		<value condition="String.IsEqual(ListItem.DBType,season)">[COLOR text_hi]$INFO[ListItem.Label][/COLOR]</value>
+		<value>$INFO[ListItem.Year]</value>
+	</variable>
+	<variable name="TraktDurationPill">
+		<value condition="Integer.IsGreater(ListItem.Duration(mins),59)">$INFO[ListItem.Duration(h),,h ]$INFO[ListItem.Duration(m),,m]</value>
+		<value>$INFO[ListItem.Duration(mins),,m]</value>
+	</variable>
+	<variable name="TraktEpisodeBadge">
+		<value condition="Integer.IsEqual(ListItem.Season,1) + Integer.IsEqual(ListItem.Episode,1)">New</value>
+		<value condition="Integer.IsEqual(ListItem.Episode,1)">Premiere</value>
+	</variable>
+
+	<variable name="HomeBackdropVar">
+		<value condition="!String.IsEmpty(Container.ListItem.Art(fanart))">$INFO[Container.ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Container.ListItem.Art(tvshow.fanart))">$INFO[Container.ListItem.Art(tvshow.fanart)]</value>
+	</variable>
+	<variable name="TraktUserLabel">
+		<value condition="String.IsEmpty(Addon.SettingStr(plugin.video.elementum,trakt_token))">Not signed in</value>
+		<value>Trakt connected</value>
+	</variable>
+
+	<!-- ===================================================================== Home notice card -->
+	<!-- Mirrors Trakt's "Your queue awaits" card: wide surface, message and one outlined button. -->
+	<include name="TraktHomeNotice">
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<left>12</left>
+				<top>20</top>
+				<width>1740</width>
+				<height>250</height>
+				<label></label>
+				<texturenofocus colordiffuse="surface" border="26">trakt/frames/rr24.png</texturenofocus>
+				<texturefocus colordiffuse="surface_hi" border="26">trakt/frames/rr24.png</texturefocus>
+				<onclick>$PARAM[onclick]</onclick>
+				<onleft>9000</onleft>
+				<onright>noop</onright>
+				<visible>$PARAM[visible]</visible>
+			</control>
+			<control type="group" id="$PARAM[id]9">
+				<top>-250</top>
+				<width>1780</width>
+				<height>250</height>
+				<visible>$PARAM[visible]</visible>
+				<control type="image">
+					<left>12</left>
+					<width>1740</width>
+					<height>250</height>
+					<texture colordiffuse="accent_deep">trakt/gradients/right.png</texture>
+					<animation effect="fade" start="100" end="60" time="0" condition="true">Conditional</animation>
+				</control>
+				<control type="image">
+					<left>5</left>
+					<top>-7</top>
+					<width>1754</width>
+					<height>264</height>
+					<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+					<visible>Control.HasFocus($PARAM[id])</visible>
+				</control>
+				<control type="label">
+					<left>60</left>
+					<top>28</top>
+					<width>1200</width>
+					<height>50</height>
+					<font>t_title</font>
+					<textcolor>text_hi</textcolor>
+					<label>$PARAM[title]</label>
+				</control>
+				<control type="textbox">
+					<left>60</left>
+					<top>80</top>
+					<width>1100</width>
+					<height>70</height>
+					<font>t_body</font>
+					<textcolor>text_mid</textcolor>
+					<label>$PARAM[text]</label>
+				</control>
+				<control type="group">
+					<left>60</left>
+					<top>174</top>
+					<control type="image">
+						<width>440</width>
+						<height>56</height>
+						<texture colordiffuse="accent" border="16">trakt/frames/ring14.png</texture>
+						<visible>!Control.HasFocus($PARAM[id])</visible>
+					</control>
+					<control type="image">
+						<width>440</width>
+						<height>56</height>
+						<texture colordiffuse="accent" border="14">trakt/frames/rr12.png</texture>
+						<visible>Control.HasFocus($PARAM[id])</visible>
+					</control>
+					<control type="label">
+						<width>440</width>
+						<height>56</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<font>t_button</font>
+						<textcolor>text_hi</textcolor>
+						<label>$PARAM[button]</label>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ===================================================================== Info page (DialogVideoInfo) -->
+	<expression name="info_is_elementum_movie">String.IsEqual(ListItem.DBType,movie) + String.Contains(ListItem.FileNameAndPath,plugin.video.elementum) + !String.IsEmpty(ListItem.UniqueID(tmdb))</expression>
+	<variable name="TraktInfoBackdrop">
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+		<value>$INFO[ListItem.Art(thumb)]</value>
+	</variable>
+	<variable name="TraktInfoPoster">
+		<value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(ListItem.Art(season.poster))">$INFO[ListItem.Art(season.poster)]</value>
+		<value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshowposter))">$INFO[ListItem.Art(tvshowposter)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value>DefaultVideo.png</value>
+	</variable>
+	<variable name="TraktInfoPosterBadge">
+		<value condition="Integer.IsGreater(ListItem.PlayCount,0)">WATCHED</value>
+		<value>STARTED</value>
+	</variable>
+	<variable name="TraktInfoPretitle">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]  •  S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
+		<value>$INFO[ListItem.TVShowTitle]</value>
+	</variable>
+	<variable name="TraktInfoTitle">
+		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.DBID,0)">$INFO[ListItem.Title]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.OriginalTitle)">$INFO[ListItem.OriginalTitle]</value>
+		<value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<variable name="TraktInfoMeta">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins),  •  ,m]$INFO[ListItem.Mpaa,  •  ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(totalepisodes))">$INFO[ListItem.Year]$INFO[ListItem.Property(totalepisodes),  •  , eps.]$INFO[ListItem.Mpaa,  •  ]$INFO[ListItem.Genre,  •  ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Episode,  •  , eps.]$INFO[ListItem.Mpaa,  •  ]$INFO[ListItem.Genre,  •  ]</value>
+		<value condition="Integer.IsGreater(ListItem.Duration(mins),59)">$INFO[ListItem.Year]$INFO[ListItem.Duration(h),  •  ,h ]$INFO[ListItem.Duration(m),,m]$INFO[ListItem.Mpaa,  •  ]$INFO[ListItem.Genre,  •  ]</value>
+		<value>$INFO[ListItem.Year]$INFO[ListItem.Duration(mins),  •  ,m]$INFO[ListItem.Mpaa,  •  ]$INFO[ListItem.Genre,  •  ]</value>
+	</variable>
+	<variable name="TraktInfoStatus">
+		<value condition="String.IsEqual(ListItem.Status,Continuing) | String.IsEqual(ListItem.Status,Returning Series)">Returning Series</value>
+		<value>$INFO[ListItem.Status]</value>
+	</variable>
+	<variable name="TraktInfoActivity">
+		<value condition="Integer.IsGreater(ListItem.PlayCount,1)">Watched $INFO[ListItem.PlayCount] times</value>
+		<value condition="Integer.IsGreater(ListItem.PlayCount,0)">Watched</value>
+		<value condition="ListItem.IsResumable">In progress  •  $INFO[ListItem.PercentPlayed]%</value>
+		<value condition="Integer.IsGreater(ListItem.Property(watchedepisodes),0)">$INFO[ListItem.Property(watchedepisodes)] of $INFO[ListItem.Property(totalepisodes)] episodes watched</value>
+		<value>No activity</value>
+	</variable>
+	<variable name="TraktInfoTooltip">
+		<value condition="Control.HasFocus(120) + Integer.IsGreater(ListItem.PlayCount,0)">Mark as unwatched on Trakt</value>
+		<value condition="Control.HasFocus(120)">Mark as watched on Trakt</value>
+		<value condition="Control.HasFocus(121)">Add to your Trakt watchlist</value>
+		<value condition="Control.HasFocus(11)">Play trailer</value>
+		<value condition="Control.HasFocus(7)">Set your rating</value>
+		<value condition="Control.HasFocus(13)">More from $INFO[ListItem.Director]</value>
+		<value condition="Control.HasFocus(14)">Versions</value>
+		<value condition="Control.HasFocus(15)">Extras</value>
+		<value condition="Control.HasFocus(10)">Choose artwork</value>
+		<value condition="Control.HasFocus(6)">Refresh information</value>
+	</variable>
+	<variable name="TraktCastHeader">
+		<value condition="Container.Content(Sets)">$LOCALIZE[20457]</value>
+		<value>Actors</value>
+	</variable>
+	<include name="TraktInfoIconButton">
+		<param name="selected">false</param>
+		<param name="enable">true</param>
+		<param name="onclick_1_condition">true</param>
+		<param name="onclick_1">noop</param>
+		<param name="onclick_2_condition">false</param>
+		<param name="onclick_2">noop</param>
+		<definition>
+			<control type="radiobutton" id="$PARAM[id]">
+				<width>64</width>
+				<height>72</height>
+				<label></label>
+				<texturefocus colordiffuse="accent" border="18">trakt/frames/rr16.png</texturefocus>
+				<texturenofocus colordiffuse="surface_hi" border="18">trakt/frames/rr16.png</texturenofocus>
+				<radioposx>17</radioposx>
+				<radioposy>21</radioposy>
+				<radiowidth>30</radiowidth>
+				<radioheight>30</radioheight>
+				<selected>$PARAM[selected]</selected>
+				<textureradioonfocus colordiffuse="text_hi">$PARAM[icon]</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="accent_light">$PARAM[icon]</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="text_hi">$PARAM[icon]</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="text_hi">$PARAM[icon]</textureradiooffnofocus>
+				<textureradiooffdisabled colordiffuse="disabled">$PARAM[icon]</textureradiooffdisabled>
+				<textureradioondisabled colordiffuse="disabled">$PARAM[icon]</textureradioondisabled>
+				<onclick condition="$PARAM[onclick_1_condition]">$PARAM[onclick_1]</onclick>
+				<onclick condition="$PARAM[onclick_2_condition]">$PARAM[onclick_2]</onclick>
+				<enable>$PARAM[enable]</enable>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktInfoFact">
+		<definition>
+			<control type="group">
+				<width>336</width>
+				<height>66</height>
+				<visible>$PARAM[visible]</visible>
+				<control type="label">
+					<width>336</width>
+					<height>26</height>
+					<font>t_tiny</font>
+					<textcolor>text_lo</textcolor>
+					<label>$PARAM[title]</label>
+				</control>
+				<control type="label">
+					<top>26</top>
+					<width>336</width>
+					<height>38</height>
+					<font>t_body_m</font>
+					<textcolor>text_hi</textcolor>
+					<label>$PARAM[value]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktCastCard">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<left>12</left>
+				<top>12</top>
+				<control type="image">
+					<width>130</width>
+					<height>186</height>
+					<texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<left>35</left>
+					<top>63</top>
+					<width>60</width>
+					<height>60</height>
+					<texture colordiffuse="surface_line">trakt/icons/user.png</texture>
+				</control>
+				<control type="image">
+					<width>130</width>
+					<height>186</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true" diffuse="trakt/masks/portrait.png">$VAR[TraktCastThumb]</texture>
+				</control>
+				<control type="label">
+					<top>192</top>
+					<width>140</width>
+					<height>30</height>
+					<font>t_small_m</font>
+					<textcolor>text_hi</textcolor>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+				<control type="label">
+					<top>220</top>
+					<width>140</width>
+					<height>26</height>
+					<font>t_tiny</font>
+					<textcolor>text_lo</textcolor>
+					<label>$INFO[ListItem.Label2]</label>
+				</control>
+			</control>
+			<control type="image">
+				<left>5</left>
+				<top>5</top>
+				<width>144</width>
+				<height>200</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+	<variable name="TraktCastThumb">
+		<value condition="Container.Content(Sets) | !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value>$INFO[ListItem.Thumb]</value>
+	</variable>
+
+	<!-- ===================================================================== Background -->
+	<include name="TraktBackground">
+		<control type="image">
+			<depth>DepthBackground</depth>
+			<include>FullScreenDimensions</include>
+			<texture colordiffuse="ink">trakt/frames/white.png</texture>
+		</control>
+		<control type="image">
+			<depth>DepthBackground</depth>
+			<left>-200</left>
+			<top>-200</top>
+			<width>2000</width>
+			<height>1300</height>
+			<texture colordiffuse="accent_deep">trakt/gradients/glow-tl.png</texture>
+			<animation effect="fade" start="100" end="70" time="0" condition="true">Conditional</animation>
+		</control>
+	</include>
+
+	<!-- ===================================================================== Small pieces -->
+	<include name="TraktPill">
+		<!-- Fixed-size dark pill with centred text, used on top of artwork. -->
+		<param name="left">0</param>
+		<param name="top">0</param>
+		<param name="width">80</param>
+		<param name="height">32</param>
+		<param name="color">overlay_card</param>
+		<param name="textcolor">text_hi</param>
+		<param name="visible">true</param>
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<visible>$PARAM[visible]</visible>
+				<control type="image">
+					<texture colordiffuse="$PARAM[color]" border="16">trakt/frames/pill32.png</texture>
+				</control>
+				<control type="label">
+					<left>8</left>
+					<right>8</right>
+					<font>t_badge</font>
+					<align>center</align>
+					<aligny>center</aligny>
+					<textcolor>$PARAM[textcolor]</textcolor>
+					<label>$PARAM[label]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktSectionHeader">
+		<param name="icon">trakt/icons/section.png</param>
+		<param name="caption"></param>
+		<definition>
+			<control type="grouplist">
+				<left>12</left>
+				<top>0</top>
+				<width>1200</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="image">
+					<top>14</top>
+					<width>32</width>
+					<height>32</height>
+					<texture colordiffuse="text_hi">$PARAM[icon]</texture>
+				</control>
+				<control type="label">
+					<width>auto</width>
+					<height>60</height>
+					<font>t_section</font>
+					<textcolor>text_hi</textcolor>
+					<aligny>center</aligny>
+					<label>$PARAM[label]</label>
+				</control>
+				<control type="image">
+					<top>17</top>
+					<left>-8</left>
+					<width>28</width>
+					<height>28</height>
+					<texture colordiffuse="text_hi">trakt/icons/chevron-right.png</texture>
+				</control>
+			</control>
+			<control type="label">
+				<right>70</right>
+				<top>2</top>
+				<width>820</width>
+				<height>60</height>
+				<align>right</align>
+				<aligny>center</aligny>
+				<font>t_meta</font>
+				<textcolor>text_lo</textcolor>
+				<label>$PARAM[caption]</label>
+				<visible>Control.HasFocus($PARAM[list_id])</visible>
+				<animation effect="fade" time="200">VisibleChange</animation>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktSkeleton">
+		<!-- Placeholder cards shown while a row is loading (Trakt-style skeleton). -->
+		<param name="width">206</param>
+		<param name="height">309</param>
+		<param name="gap">24</param>
+		<definition>
+			<control type="grouplist">
+				<left>12</left>
+				<top>76</top>
+				<width>1780</width>
+				<height>$PARAM[height]</height>
+				<orientation>horizontal</orientation>
+				<itemgap>$PARAM[gap]</itemgap>
+				<visible>Container($PARAM[list_id]).IsUpdating + !Integer.IsGreater(Container($PARAM[list_id]).NumItems,0)</visible>
+				<animation effect="fade" start="40" end="100" time="900" pulse="true" condition="true">Conditional</animation>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+				<control type="image"><width>$PARAM[width]</width><height>$PARAM[height]</height><texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture></control>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktWatchedBadge">
+		<param name="left">0</param>
+		<param name="top">0</param>
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+				<control type="image">
+					<width>36</width>
+					<height>36</height>
+					<texture colordiffuse="accent">trakt/frames/circle.png</texture>
+				</control>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>22</width>
+					<height>22</height>
+					<texture colordiffuse="text_hi">trakt/icons/check.png</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktCardProgress">
+		<param name="left">0</param>
+		<param name="width">206</param>
+		<param name="top">300</param>
+		<definition>
+			<control type="progress">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>6</height>
+				<texturebg colordiffuse="99000000">trakt/frames/white.png</texturebg>
+				<midtexture colordiffuse="accent">trakt/frames/white.png</midtexture>
+				<info>ListItem.PercentPlayed</info>
+				<visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ===================================================================== Cards -->
+	<!-- Poster card: 206x309 artwork at (12,12) inside a 230x384 cell. -->
+	<include name="TraktPosterCard">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<left>12</left>
+				<top>12</top>
+				<control type="image">
+					<width>206</width>
+					<height>309</height>
+					<texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<width>206</width>
+					<height>309</height>
+					<aspectratio>scale</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" diffuse="trakt/masks/poster.png">$VAR[TraktPosterArt]</texture>
+				</control>
+				<include content="TraktCardProgress">
+					<param name="left">10</param>
+					<param name="width">186</param>
+					<param name="top">293</param>
+				</include>
+				<include content="TraktWatchedBadge">
+					<param name="left">160</param>
+					<param name="top">10</param>
+				</include>
+				<control type="image">
+					<top>332</top>
+					<left>2</left>
+					<width>22</width>
+					<height>22</height>
+					<texture colordiffuse="accent_light">trakt/icons/star-filled.png</texture>
+					<visible>!String.IsEmpty(ListItem.Rating)</visible>
+				</control>
+				<control type="label">
+					<top>323</top>
+					<left>32</left>
+					<width>172</width>
+					<height>40</height>
+					<aligny>center</aligny>
+					<font>t_stat</font>
+					<textcolor>text_hi</textcolor>
+					<label>$INFO[ListItem.Rating]$INFO[ListItem.Year,[COLOR text_lo]   ,[/COLOR]]</label>
+					<visible>!String.IsEmpty(ListItem.Rating)</visible>
+				</control>
+				<control type="label">
+					<top>323</top>
+					<left>2</left>
+					<width>202</width>
+					<height>40</height>
+					<aligny>center</aligny>
+					<font>t_stat</font>
+					<textcolor>text_lo</textcolor>
+					<label>$VAR[TraktPosterStatPlain]</label>
+					<visible>String.IsEmpty(ListItem.Rating)</visible>
+				</control>
+			</control>
+			<control type="image">
+				<left>5</left>
+				<top>5</top>
+				<width>220</width>
+				<height>323</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+	<!-- Landscape card: 336x189 artwork at (12,12) inside a 360x300 cell. -->
+	<include name="TraktLandscapeCard">
+		<param name="focused">false</param>
+		<param name="title">$VAR[TraktCardTitle]</param>
+		<param name="subtitle">$VAR[TraktCardSubtitle]</param>
+		<param name="pill_right"></param>
+		<param name="pill_right_visible">false</param>
+		<definition>
+			<control type="group">
+				<left>12</left>
+				<top>12</top>
+				<control type="image">
+					<width>336</width>
+					<height>189</height>
+					<texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<width>336</width>
+					<height>189</height>
+					<aspectratio>scale</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" diffuse="trakt/masks/landscape.png">$VAR[TraktLandscapeArt]</texture>
+				</control>
+				<control type="image">
+					<left>136</left>
+					<top>62</top>
+					<width>64</width>
+					<height>64</height>
+					<aspectratio>keep</aspectratio>
+					<texture>$INFO[ListItem.Icon]</texture>
+					<visible>ListItem.IsParentFolder</visible>
+				</control>
+				<control type="image">
+					<width>336</width>
+					<height>189</height>
+					<texture diffuse="trakt/masks/landscape.png" colordiffuse="CC000000">trakt/gradients/card-bottom.png</texture>
+				</control>
+				<include content="TraktPill">
+					<param name="left">10</param>
+					<param name="top">147</param>
+					<param name="width">92</param>
+					<param name="label">$VAR[TraktDurationPill]</param>
+					<param name="visible">Integer.IsGreater(ListItem.Duration(mins),0)</param>
+				</include>
+				<include content="TraktPill">
+					<param name="left">202</param>
+					<param name="top">147</param>
+					<param name="width">124</param>
+					<param name="label">$PARAM[pill_right]</param>
+					<param name="visible">!String.IsEmpty(ListItem.Premiered) + $PARAM[pill_right_visible]</param>
+				</include>
+				<include content="TraktPill">
+					<param name="left">10</param>
+					<param name="top">10</param>
+					<param name="width">108</param>
+					<param name="label">$VAR[TraktEpisodeBadge]</param>
+					<param name="color">accent</param>
+					<param name="visible">$EXP[item_is_episode] + Integer.IsEqual(ListItem.Episode,1)</param>
+				</include>
+				<include content="TraktCardProgress">
+					<param name="left">0</param>
+					<param name="width">336</param>
+					<param name="top">183</param>
+				</include>
+				<control type="label">
+					<top>200</top>
+					<left>2</left>
+					<width>290</width>
+					<height>36</height>
+					<font>t_label_b</font>
+					<textcolor>text_hi</textcolor>
+					<label>$PARAM[title]</label>
+					<visible>!$PARAM[focused]</visible>
+				</control>
+				<control type="label">
+					<top>200</top>
+					<left>2</left>
+					<width>290</width>
+					<height>36</height>
+					<font>t_label_b</font>
+					<textcolor>accent_light</textcolor>
+					<label>$PARAM[title]</label>
+					<scroll>true</scroll>
+					<visible>$PARAM[focused]</visible>
+				</control>
+				<control type="label">
+					<top>236</top>
+					<left>2</left>
+					<width>320</width>
+					<height>32</height>
+					<font>t_small</font>
+					<textcolor>text_lo</textcolor>
+					<label>$PARAM[subtitle]</label>
+				</control>
+				<control type="image">
+					<top>204</top>
+					<left>304</left>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="accent_light">trakt/icons/checks.png</texture>
+					<visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+				</control>
+			</control>
+			<control type="image">
+				<left>5</left>
+				<top>5</top>
+				<width>350</width>
+				<height>203</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+	<!-- "Next page" item from Elementum rendered as a Trakt "see more" tile. -->
+	<include name="TraktMoreCard">
+		<param name="width">206</param>
+		<param name="height">309</param>
+		<param name="focused">false</param>
+		<param name="ring_width">220</param>
+		<param name="ring_height">323</param>
+		<definition>
+			<control type="group">
+				<left>12</left>
+				<top>12</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<control type="image">
+					<texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<texture colordiffuse="accent_glow" border="14">trakt/frames/rr12.png</texture>
+					<visible>$PARAM[focused]</visible>
+				</control>
+				<control type="group">
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>180</width>
+					<height>130</height>
+					<control type="image">
+						<left>54</left>
+						<width>72</width>
+						<height>72</height>
+						<texture colordiffuse="surface_hi">trakt/frames/circle.png</texture>
+					</control>
+					<control type="image">
+						<left>70</left>
+						<top>16</top>
+						<width>40</width>
+						<height>40</height>
+						<texture colordiffuse="text_hi">trakt/icons/chevron-right.png</texture>
+					</control>
+					<control type="label">
+						<top>84</top>
+						<height>40</height>
+						<align>center</align>
+						<font>t_label_b</font>
+						<textcolor>text_hi</textcolor>
+						<label>See more</label>
+					</control>
+				</control>
+			</control>
+			<control type="image">
+				<left>5</left>
+				<top>5</top>
+				<width>$PARAM[ring_width]</width>
+				<height>$PARAM[ring_height]</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Menu tile: Elementum menu entries, add-ons and anything without a poster. Size-agnostic
+	     (percent positions), so the grid and the carousel can use it at different sizes. -->
+	<expression name="item_is_tile">ListItem.IsParentFolder | String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster)) + String.IsEmpty(ListItem.Art(tvshowposter)) + !$EXP[item_is_episode]</expression>
+	<include name="TraktTileCard">
+		<param name="left">12</param>
+		<param name="top">12</param>
+		<param name="width">206</param>
+		<param name="height">309</param>
+		<param name="focused">false</param>
+		<param name="ring_left">5</param>
+		<param name="ring_top">5</param>
+		<param name="ring_width">220</param>
+		<param name="ring_height">323</param>
+		<param name="font">t_label_b</param>
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<control type="image">
+					<texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<texture colordiffuse="accent_deep">trakt/gradients/glow-tl.png</texture>
+					<visible>$PARAM[focused]</visible>
+				</control>
+				<control type="group">
+					<centerleft>50%</centerleft>
+					<top>15%</top>
+					<width>54%</width>
+					<height>37%</height>
+					<include content="TraktMenuBadge" />
+				</control>
+				<control type="textbox">
+					<left>8%</left>
+					<right>8%</right>
+					<top>58%</top>
+					<height>34%</height>
+					<align>center</align>
+					<font>$PARAM[font]</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[TraktTileLabel]</label>
+				</control>
+			</control>
+			<control type="image">
+				<left>$PARAM[ring_left]</left>
+				<top>$PARAM[ring_top]</top>
+				<width>$PARAM[ring_width]</width>
+				<height>$PARAM[ring_height]</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+	<variable name="TraktTileIcon">
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="!String.IsEmpty(ListItem.Icon)">$INFO[ListItem.Icon]</value>
+		<value>DefaultFolder.png</value>
+	</variable>
+	<variable name="TraktTileLabel">
+		<value condition="ListItem.IsParentFolder">..</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<!-- Carousel poster: artwork only (the hero above carries the text). Size-agnostic like the tile. -->
+	<include name="TraktCarouselPoster">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<control type="image">
+					<texture colordiffuse="surface" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<aspectratio>scale</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" diffuse="$PARAM[mask]">$PARAM[art]</texture>
+				</control>
+				<control type="progress">
+					<left>6%</left>
+					<right>6%</right>
+					<bottom>4%</bottom>
+					<height>6</height>
+					<texturebg colordiffuse="99000000">trakt/frames/white.png</texturebg>
+					<midtexture colordiffuse="accent">trakt/frames/white.png</midtexture>
+					<info>ListItem.PercentPlayed</info>
+					<visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+				</control>
+				<control type="group">
+					<right>10</right>
+					<top>10</top>
+					<width>36</width>
+					<height>36</height>
+					<visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+					<control type="image">
+						<texture colordiffuse="accent">trakt/frames/circle.png</texture>
+					</control>
+					<control type="image">
+						<left>7</left>
+						<top>7</top>
+						<width>22</width>
+						<height>22</height>
+						<texture colordiffuse="text_hi">trakt/icons/check.png</texture>
+					</control>
+				</control>
+			</control>
+			<control type="image">
+				<left>$PARAM[ring_left]</left>
+				<top>$PARAM[ring_top]</top>
+				<width>$PARAM[ring_width]</width>
+				<height>$PARAM[ring_height]</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ===================================================================== Elementum menus -->
+	<!-- Icons are picked by the entry's path (Elementum reuses the same image for unrelated entries). -->
+	<expression name="item_is_elementum">String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.elementum)</expression>
+	<!-- Big tiles only for Elementum's three top menus; other menus and search history use compact cards. -->
+	<expression name="elementum_menu_tiles">String.IsEqual(Container.FolderPath,plugin://plugin.video.elementum/)</expression>
+	<expression name="plugin_menu_any">Container.Content() + String.StartsWith(Container.FolderPath,plugin://)</expression>
+	<variable name="TraktMenuPageTitle">
+		<value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.elementum/)">Elementum</value>
+		<value condition="String.Contains(Container.FolderPath,/search)">Search</value>
+		<value condition="!String.IsEmpty(Container.FolderName) + !String.IsEqual(Container.FolderName,$LOCALIZE[3])">$INFO[Container.FolderName]</value>
+		<value>$INFO[Container.PluginName]</value>
+	</variable>
+	<variable name="TraktMenuPageSubtitle">
+		<value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.elementum/)">Movies, TV shows and torrents</value>
+		<value condition="String.Contains(Container.FolderPath,/search)">Start a new search or pick up a recent one</value>
+		<value>$INFO[Container.NumItems,, items]</value>
+	</variable>
+	<expression name="plugin_menu_compact">Container.Content() + String.StartsWith(Container.FolderPath,plugin://) + ![$EXP[elementum_menu_tiles]]</expression>
+	<variable name="TraktMenuIcon">
+		<value condition="ListItem.IsParentFolder">trakt/icons/chevron-left.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,search?keyboard) | String.Contains(ListItem.FileNameAndPath,search?new)">trakt/icons/menu-search.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,search?q=) | String.Contains(ListItem.FileNameAndPath,search?query=)">trakt/icons/menu-past-search.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/history?infohash=)">trakt/icons/menu-magnet.png</value>
+		<value condition="String.EndsWith(ListItem.FileNameAndPath,elementum/movies/)">trakt/icons/menu-movies.png</value>
+		<value condition="String.EndsWith(ListItem.FileNameAndPath,elementum/shows/)">trakt/icons/menu-shows.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/history)">trakt/icons/menu-history.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/lists)">trakt/icons/menu-lists.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/watchlist)">trakt/icons/menu-watchlist.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/collection)">trakt/icons/menu-collection.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,premieres)">trakt/icons/menu-premieres.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/calendars)">trakt/icons/menu-calendar.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/recommendations)">trakt/icons/menu-recommended.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/toplists)">trakt/icons/menu-toplists.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/trending)">trakt/icons/menu-trending.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/played)">trakt/icons/menu-played.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/watched)">trakt/icons/menu-watched.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/collected)">trakt/icons/menu-collected.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/anticipated)">trakt/icons/menu-anticipated.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/boxoffice)">trakt/icons/menu-boxoffice.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/trakt/progress)">trakt/icons/menu-progress.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/genre)">trakt/icons/menu-genres.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/language)">trakt/icons/menu-languages.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/countr)">trakt/icons/menu-countries.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/popular)">trakt/icons/menu-popular.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/recent/episodes)">trakt/icons/menu-episodes.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/recent)">trakt/icons/menu-recent.png</value>
+		<value condition="String.EndsWith(ListItem.FileNameAndPath,/top) | String.Contains(ListItem.FileNameAndPath,/top?)">trakt/icons/menu-top.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/mostvoted)">trakt/icons/menu-voted.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/imdb250)">trakt/icons/menu-imdb.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/elementum_library)">trakt/icons/menu-elementum-library.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/library)">trakt/icons/menu-library.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/search)">trakt/icons/menu-search.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/torrents)">trakt/icons/menu-torrents.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/playtorrent)">trakt/icons/menu-addtorrent.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/history)">trakt/icons/menu-history.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/provider)">trakt/icons/menu-providers.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/changelog)">trakt/icons/menu-changelog.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/status)">trakt/icons/menu-status.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/donate)">trakt/icons/menu-donate.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/settings/plugin.video.elementum)">trakt/icons/menu-settings.png</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,/settings/)">trakt/icons/menu-provider-settings.png</value>
+		<value>trakt/icons/menu-folder.png</value>
+	</variable>
+	<!-- Icon badge: accent rounded square + white glyph for Elementum entries, the item's own icon otherwise.
+	     Size-agnostic (fills its parent group). -->
+	<include name="TraktMenuBadge">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<visible>$EXP[item_is_elementum] | ListItem.IsParentFolder</visible>
+				<control type="image">
+					<texture colordiffuse="accent" border="14">trakt/frames/rr12.png</texture>
+					<visible>!ListItem.IsParentFolder</visible>
+				</control>
+				<control type="image">
+					<texture colordiffuse="surface_hi" border="14">trakt/frames/rr12.png</texture>
+					<visible>ListItem.IsParentFolder</visible>
+				</control>
+				<control type="image">
+					<height>50%</height>
+					<texture colordiffuse="22FFFFFF" border="14">trakt/frames/rr12.png</texture>
+					<visible>!ListItem.IsParentFolder</visible>
+				</control>
+				<control type="image">
+					<left>25%</left>
+					<top>25%</top>
+					<width>50%</width>
+					<height>50%</height>
+					<aspectratio>keep</aspectratio>
+					<texture colordiffuse="text_hi">$VAR[TraktMenuIcon]</texture>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!$EXP[item_is_elementum] + !ListItem.IsParentFolder</visible>
+				<control type="image">
+					<texture colordiffuse="surface_hi" border="14">trakt/frames/rr12.png</texture>
+				</control>
+				<control type="image">
+					<left>14%</left>
+					<top>14%</top>
+					<width>72%</width>
+					<height>72%</height>
+					<aspectratio>keep</aspectratio>
+					<texture background="true">$VAR[TraktTileIcon]</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<!-- Compact two-line card for long menus, search history, torrent history, other add-ons' folders. -->
+	<include name="TraktMenuCard">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<left>12</left>
+				<top>8</top>
+				<control type="image">
+					<width>542</width>
+					<height>96</height>
+					<texture colordiffuse="surface" border="18">trakt/frames/rr16.png</texture>
+				</control>
+				<control type="image">
+					<width>542</width>
+					<height>96</height>
+					<texture colordiffuse="surface_hi" border="18">trakt/frames/rr16.png</texture>
+					<visible>$PARAM[focused]</visible>
+				</control>
+				<control type="group">
+					<left>16</left>
+					<top>16</top>
+					<width>64</width>
+					<height>64</height>
+					<include content="TraktMenuBadge" />
+				</control>
+				<control type="label">
+					<left>100</left>
+					<top>12</top>
+					<width>390</width>
+					<height>40</height>
+					<font>t_label_b</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[TraktTileLabel]</label>
+					<scroll>true</scroll>
+					<visible>!String.IsEmpty(ListItem.Label2)</visible>
+				</control>
+				<control type="label">
+					<left>100</left>
+					<top>50</top>
+					<width>390</width>
+					<height>32</height>
+					<font>t_small</font>
+					<textcolor>text_lo</textcolor>
+					<label>$INFO[ListItem.Label2]</label>
+					<visible>!String.IsEmpty(ListItem.Label2)</visible>
+				</control>
+				<control type="label">
+					<left>100</left>
+					<top>0</top>
+					<width>390</width>
+					<height>96</height>
+					<aligny>center</aligny>
+					<font>t_label_b</font>
+					<textcolor>text_hi</textcolor>
+					<label>$VAR[TraktTileLabel]</label>
+					<visible>String.IsEmpty(ListItem.Label2)</visible>
+				</control>
+				<control type="image">
+					<left>500</left>
+					<top>34</top>
+					<width>28</width>
+					<height>28</height>
+					<texture colordiffuse="text_lo">trakt/icons/chevron-right.png</texture>
+					<visible>ListItem.IsFolder + !ListItem.IsParentFolder</visible>
+				</control>
+			</control>
+			<control type="image">
+				<left>5</left>
+				<top>1</top>
+				<width>556</width>
+				<height>110</height>
+				<texture colordiffuse="accent" border="20">trakt/frames/ring18.png</texture>
+				<visible>$PARAM[focused]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ===================================================================== Cells
+	     One layout per container; each item shows the variant that fits it. -->
+	<include name="TraktPosterCell">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[item_is_nextpage] + !$EXP[item_is_tile]</visible>
+				<include content="TraktPosterCard">
+					<param name="focused">$PARAM[focused]</param>
+				</include>
+			</control>
+			<control type="group">
+				<visible>$EXP[item_is_tile] + !$EXP[item_is_nextpage]</visible>
+				<include content="TraktTileCard">
+					<param name="focused">$PARAM[focused]</param>
+				</include>
+			</control>
+			<control type="group">
+				<visible>$EXP[item_is_nextpage]</visible>
+				<include content="TraktMoreCard">
+					<param name="focused">$PARAM[focused]</param>
+				</include>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktLandscapeCell">
+		<param name="focused">false</param>
+		<param name="title">$VAR[TraktCardTitle]</param>
+		<param name="subtitle">$VAR[TraktCardSubtitle]</param>
+		<param name="pill_right"></param>
+		<param name="pill_right_visible">false</param>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[item_is_nextpage]</visible>
+				<include content="TraktLandscapeCard">
+					<param name="focused">$PARAM[focused]</param>
+					<param name="title">$PARAM[title]</param>
+					<param name="subtitle">$PARAM[subtitle]</param>
+					<param name="pill_right">$PARAM[pill_right]</param>
+					<param name="pill_right_visible">$PARAM[pill_right_visible]</param>
+				</include>
+			</control>
+			<control type="group">
+				<visible>$EXP[item_is_nextpage]</visible>
+				<include content="TraktMoreCard">
+					<param name="width">336</param>
+					<param name="height">189</param>
+					<param name="focused">$PARAM[focused]</param>
+					<param name="ring_width">350</param>
+					<param name="ring_height">203</param>
+				</include>
+			</control>
+		</definition>
+	</include>
+	<!-- Carousel poster cell; sizes differ between the normal and the focused layout. -->
+	<include name="TraktCarouselCell">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[item_is_nextpage] + !$EXP[item_is_tile]</visible>
+				<include content="TraktCarouselPoster">
+					<param name="left">12</param>
+					<param name="top">$PARAM[top]</param>
+					<param name="width">$PARAM[width]</param>
+					<param name="height">$PARAM[height]</param>
+					<param name="art">$VAR[TraktPosterArt]</param>
+					<param name="mask">trakt/masks/poster.png</param>
+					<param name="focused">$PARAM[focused]</param>
+					<param name="ring_left">5</param>
+					<param name="ring_top">$PARAM[ring_top]</param>
+					<param name="ring_width">$PARAM[ring_width]</param>
+					<param name="ring_height">$PARAM[ring_height]</param>
+				</include>
+			</control>
+			<control type="group">
+				<visible>$EXP[item_is_tile] + !$EXP[item_is_nextpage]</visible>
+				<include content="TraktTileCard">
+					<param name="top">$PARAM[top]</param>
+					<param name="width">$PARAM[width]</param>
+					<param name="height">$PARAM[height]</param>
+					<param name="font">t_label</param>
+					<param name="focused">$PARAM[focused]</param>
+					<param name="ring_top">$PARAM[ring_top]</param>
+					<param name="ring_width">$PARAM[ring_width]</param>
+					<param name="ring_height">$PARAM[ring_height]</param>
+				</include>
+			</control>
+			<control type="group">
+				<top>128</top>
+				<visible>$EXP[item_is_nextpage]</visible>
+				<include content="TraktMoreCard">
+					<param name="focused">$PARAM[focused]</param>
+				</include>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktCarouselLandscapeCell">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[item_is_nextpage]</visible>
+				<include content="TraktCarouselPoster">
+					<param name="left">12</param>
+					<param name="top">$PARAM[top]</param>
+					<param name="width">$PARAM[width]</param>
+					<param name="height">$PARAM[height]</param>
+					<param name="art">$VAR[TraktLandscapeArt]</param>
+					<param name="mask">trakt/masks/landscape.png</param>
+					<param name="focused">$PARAM[focused]</param>
+					<param name="ring_left">5</param>
+					<param name="ring_top">$PARAM[ring_top]</param>
+					<param name="ring_width">$PARAM[ring_width]</param>
+					<param name="ring_height">$PARAM[ring_height]</param>
+				</include>
+			</control>
+			<control type="group">
+				<top>248</top>
+				<visible>$EXP[item_is_nextpage]</visible>
+				<include content="TraktMoreCard">
+					<param name="width">336</param>
+					<param name="height">189</param>
+					<param name="focused">$PARAM[focused]</param>
+					<param name="ring_width">350</param>
+					<param name="ring_height">203</param>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ===================================================================== Rows -->
+	<include name="TraktRowCommon">
+		<orientation>horizontal</orientation>
+		<scrolltime tween="cubic" easing="out">380</scrolltime>
+		<onleft>9000</onleft>
+		<preloaditems>2</preloaditems>
+		<onback>SetFocus($PARAM[list_id],0,absolute)</onback>
+	</include>
+	<include name="TraktPosterRow">
+		<param name="visible">true</param>
+		<param name="limit">25</param>
+		<param name="target">videos</param>
+		<param name="icon">trakt/icons/section.png</param>
+		<param name="pill_right">$INFO[ListItem.Premiered]</param>
+		<param name="pill_right_visible">false</param>
+		<definition>
+			<control type="group" id="$PARAM[list_id]0">
+				<width>1780</width>
+				<height>58</height>
+				<visible>$PARAM[visible]</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<include content="TraktSectionHeader">
+					<param name="label">$PARAM[label]</param>
+					<param name="list_id">$PARAM[list_id]</param>
+					<param name="icon">$PARAM[icon]</param>
+					<param name="caption">$INFO[Container($PARAM[list_id]).ListItem.Label]$INFO[Container($PARAM[list_id]).ListItem.Genre,  •  ]</param>
+				</include>
+				<include content="TraktSkeleton">
+					<param name="list_id">$PARAM[list_id]</param>
+				</include>
+			</control>
+			<control type="list" id="$PARAM[list_id]">
+				<width>1780</width>
+				<height>388</height>
+				<visible>$PARAM[visible]</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<include content="TraktRowCommon">
+					<param name="list_id">$PARAM[list_id]</param>
+				</include>
+				<itemlayout width="230" height="388">
+					<include content="TraktPosterCell">
+					</include>
+				</itemlayout>
+				<focusedlayout width="230" height="388">
+					<include content="TraktPosterCell">
+						<param name="focused">Control.HasFocus($PARAM[list_id])</param>
+					</include>
+				</focusedlayout>
+				<content target="$PARAM[target]" limit="$PARAM[limit]">$PARAM[path]</content>
+			</control>
+		</definition>
+	</include>
+	<include name="TraktLandscapeRow">
+		<param name="visible">true</param>
+		<param name="limit">25</param>
+		<param name="target">videos</param>
+		<param name="icon">trakt/icons/section.png</param>
+		<param name="pill_right">$INFO[ListItem.Premiered]</param>
+		<param name="pill_right_visible">false</param>
+		<definition>
+			<control type="group" id="$PARAM[list_id]0">
+				<width>1780</width>
+				<height>58</height>
+				<visible>$PARAM[visible]</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<include content="TraktSectionHeader">
+					<param name="label">$PARAM[label]</param>
+					<param name="list_id">$PARAM[list_id]</param>
+					<param name="icon">$PARAM[icon]</param>
+				</include>
+				<include content="TraktSkeleton">
+					<param name="list_id">$PARAM[list_id]</param>
+					<param name="width">336</param>
+					<param name="height">189</param>
+				</include>
+			</control>
+			<control type="list" id="$PARAM[list_id]">
+				<width>1780</width>
+				<height>306</height>
+				<visible>$PARAM[visible]</visible>
+				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<include content="TraktRowCommon">
+					<param name="list_id">$PARAM[list_id]</param>
+				</include>
+				<itemlayout width="360" height="306">
+					<include content="TraktLandscapeCell">
+						<param name="pill_right">$PARAM[pill_right]</param>
+						<param name="pill_right_visible">$PARAM[pill_right_visible]</param>
+					</include>
+				</itemlayout>
+				<focusedlayout width="360" height="306">
+					<include content="TraktLandscapeCell">
+						<param name="focused">Control.HasFocus($PARAM[list_id])</param>
+						<param name="pill_right">$PARAM[pill_right]</param>
+						<param name="pill_right_visible">$PARAM[pill_right_visible]</param>
+					</include>
+				</focusedlayout>
+				<content target="$PARAM[target]" limit="$PARAM[limit]">$PARAM[path]</content>
+			</control>
+		</definition>
+	</include>
+</includes>

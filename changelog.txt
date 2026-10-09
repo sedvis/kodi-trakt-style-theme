@@ -1,0 +1,63 @@
+[B]Trakt Style 1.2.0[/B]
+- Elementum menus get their own icon set (Movies, TV Shows, Search, Torrents, Add Torrent, History, Providers, Changelog, Status, Donate, Settings, every Trakt/TMDB list), picked by each entry's path and tinted with the theme colour
+- Elementum's main menu keeps big tiles; the Movies / TV Shows menus, search history, torrent history and other add-on menus use compact two-line cards
+- Menu screens get a page header (e.g. "Elementum", "Search")
+- Back from Elementum's main menu (or the Video add-ons list) goes to the home screen instead of Kodi's Videos screen
+- The start-up jump into Elementum now opens from the home screen, so Back returns there
+
+[B]Trakt Style 1.1.0[/B]
+- New video player look: now-playing block (poster, S/E, title, episode name), quality pills, end time, thick rounded progress bar with chapter marks, round controls with a big play button, logo + clock strip on top, plot and "up next" on Info
+- Elementum's playback status box now sits above the player panel instead of over it (16:9 is listed first in addon.xml, which Elementum reads to place the box)
+
+[B]Trakt Style 1.0.1[/B]
+- Home: arrow keys now move between the rows and the Media / Shows / Movies tabs
+- Home: the left icon rail works with arrow keys (up/down inside it, right back to the rows)
+- Elementum screens only use the Trakt views (poster grid, episode grid, carousel), so a view saved by a previous skin or forced by Elementum's "Default view" settings no longer shows an unthemed Estuary view
+
+[B]Trakt Style 1.0.0[/B]
+- First release, based on Estuary 4.0.0 (Kodi 21)
+
+[B]0.8.5[/B]
+• Updated language files from Transifex
+
+[B]0.8.3[/B]
+• Updated language files from Transifex
+
+[B]0.8.2[/B]
+• Updated language files from Transifex
+
+[B]0.8.1[/B]
+• Updated language files from Transifex
+
+[B]0.7.13[/B]
+• Updated language files from Transifex
+
+[B]0.7.12[/B]
+• Updated language files from Transifex
+
+[B]0.7.11[/B]
+• Updated language files from Transifex
+
+[B]0.7.10[/B]
+• Updated language files from Transifex
+
+[B]0.7.8[/B]
+• Updated language files from Transifex
+
+[B]0.7.7[/B]
+• Updated language files from Transifex
+
+[B]0.7.3[/B]
+• Updated language files from Transifex
+
+[B]0.7.1[/B]
+• Updated language files from Transifex
+
+[B]0.6.2[/B]
+• Updated language files from Transifex
+
+[B]0.6.1[/B]
+• Updated language files from Transifex
+
+﻿[B]0.0.1[/B]
+• Initial commit
