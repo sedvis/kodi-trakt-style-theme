@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.traktstyle" version="1.2.5" name="Trakt Style" provider-name="Estuary by phil65, Ichabod Fletchman; Trakt Style mod">
+<addon id="skin.traktstyle" version="1.2.5" name="Trakt Style" provider-name="sedvis">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>
@@ -27,7 +27,7 @@
 			<screenshot>resources/screenshot-05.jpg</screenshot>
 		</assets>
 		<summary lang="en_GB">A dark, Trakt-inspired skin built around Elementum.</summary>
-		<description lang="en_GB">Trakt Style rebuilds Kodi's Estuary skin to look and feel like the Trakt web app: deep ink background, purple accent, Roboto type, rounded poster and episode cards, a Media / Shows / Movies switcher on the home screen and Trakt-like movie and show pages. Home rows come straight from Elementum's Trakt lists (Continue Watching, Calendar, Watchlist, Trending, Anticipated and more). Personal rows appear automatically once Elementum is signed in to Trakt. Not affiliated with or endorsed by Trakt.</description>
+		<description lang="en_GB">Trakt Style rebuilds Kodi's Estuary skin to look and feel like the Trakt web app: deep ink background, purple accent, Roboto type, rounded poster and episode cards, a Media / Shows / Movies switcher on the home screen and Trakt-like movie and show pages. Home rows come straight from Elementum's Trakt lists (Continue Watching, Calendar, Watchlist, Trending, Anticipated and more). Personal rows appear automatically once Elementum is signed in to Trakt. Based on Estuary by phil65 and Ichabod Fletchman (Team Kodi). Not affiliated with or endorsed by Trakt.</description>
 		<disclaimer lang="en_GB">Unofficial fan skin. Trakt is a trademark of trakt, inc.</disclaimer>
 	</extension>
 </addon>

@@ -247,6 +247,10 @@ def build():
 	<onload condition="String.IsEqual(Window(home).Property(trakt_autostart),1) + String.IsEqual(Skin.String(startup_target),shows)">ActivateWindow(Videos,"plugin://plugin.video.elementum/shows/",return)</onload>
 	<onload>ClearProperty(trakt_autostart,home)</onload>
 	<onload condition="String.IsEmpty(Window(home).Property(trakt_wheel_synced))">RunScript(special://skin/scripts/home_wheel.py)</onload>
+	<!-- Show the skin version once after it changes (repository update or first install). -->
+	<onload condition="String.IsEmpty(Skin.String(seen_version))">Notification(Trakt Style,Version $INFO[System.AddonVersion(skin.traktstyle)] installed,6000,special://skin/resources/icon.png)</onload>
+	<onload condition="!String.IsEmpty(Skin.String(seen_version)) + !String.IsEqual(Skin.String(seen_version),System.AddonVersion(skin.traktstyle))">Notification(Trakt Style,Updated to version $INFO[System.AddonVersion(skin.traktstyle)],6000,special://skin/resources/icon.png)</onload>
+	<onload condition="!String.IsEqual(Skin.String(seen_version),System.AddonVersion(skin.traktstyle))">Skin.SetString(seen_version,$INFO[System.AddonVersion(skin.traktstyle)])</onload>
 	<controls>
 		<include>TraktBackground</include>
 		<control type="videowindow">
