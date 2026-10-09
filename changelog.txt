@@ -1,4 +1,4 @@
-[B]Unreleased[/B]
+[B]Trakt Style 1.2.4[/B]
 - Home: every row can open its full source list (e.g. Trending Movies) with Elementum's own paging - press Right at the end of the row for "View all", or click the row title; Back returns to the home screen
 - Info page: "No activity" now reads "Not watched yet"
 - Info page: the focus ring around the plot is no longer cut off on the left
