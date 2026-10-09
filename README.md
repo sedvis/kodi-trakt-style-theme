@@ -19,6 +19,7 @@ The skin was designed and written together with [Claude](https://claude.ai) (Ant
 - **Home screen with Media / Shows / Movies tabs** and a left icon rail for search, home, lists, library, add-ons and settings.
 - **Trakt rows from Elementum** — Continue Watching, Calendar, Watchlist, Trending, Popular, Anticipated, Box Office, Recommendations, Premieres and your Trakt lists. Personal rows appear automatically once Elementum is signed in to Trakt.
 - **Trakt-like movie and show pages** — poster, metadata, rating, details panel, cast row, and buttons for play, mark watched/unwatched, add to watchlist, trailer.
+- **Actor and director filmographies** — on a movie or show page, select an actor (or the director button) to browse their movies and shows from TMDB and open any of them. Needs your own (free) TMDB API key in *Elementum → Settings → Advanced → TheMovieDB → API key*.
 - **Elementum views** — poster grid, episode grid and a backdrop carousel. Elementum screens always use these views, even if a previous skin or Elementum's "Default view" setting saved a different one.
 - **Themed Elementum menus** — custom icons for every Elementum menu entry (Movies, TV Shows, Search, Torrents, History, Providers, Trakt/TMDB lists…), tinted with the theme colour; big tiles on the main menu, compact two-line cards elsewhere.
 - **Stream picker** styled to match (size, resolution, seeds/peers, provider).

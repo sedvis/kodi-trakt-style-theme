@@ -301,7 +301,8 @@
 						<itemgap>12</itemgap>
 						<usecontrolcoords>true</usecontrolcoords>
 						<onup>138</onup>
-						<ondown>50</ondown>
+						<ondown condition="String.IsEqual(ListItem.DBType,set)">50</ondown>
+						<ondown condition="!String.IsEqual(ListItem.DBType,set)">51</ondown>
 						<onleft>noop</onleft>
 						<onright>noop</onright>
 						<!-- Elementum TV show: Play = next episode from Trakt progress, else S1 E1
@@ -375,9 +376,11 @@
 							<param name="visible">Control.IsEnabled(7)</param>
 							<param name="enable">String.IsEmpty(Container.PluginName) + !Container.Content(Sets)</param>
 						</include>
+						<!-- Director: filmography from TMDB (scripts/person.py), not Kodi's library-only search (13). -->
 						<include content="TraktInfoIconButton">
-							<param name="id">13</param>
+							<param name="id">210</param>
 							<param name="icon">trakt/icons/users.png</param>
+							<param name="onclick_1">RunScript(special://skin/scripts/person.py,director,$ESCINFO[ListItem.Director])</param>
 							<param name="visible">!String.IsEmpty(ListItem.Director)</param>
 						</include>
 						<include content="TraktInfoIconButton">
@@ -487,7 +490,7 @@
 				<visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
 				<include content="TraktSectionHeader">
 					<param name="label">$VAR[TraktCastHeader]</param>
-					<param name="list_id">50</param>
+					<param name="list_id">51</param>
 					<param name="icon">trakt/icons/section.png</param>
 				</include>
 				<control type="panel" id="50">
@@ -496,6 +499,10 @@
 					<width>1782</width>
 					<height>262</height>
 					<orientation>horizontal</orientation>
+					<!-- Kodi fills this panel with the cast and handles its clicks itself (a search of the
+					     local library only). Shown for movie sets, where a click opens the set's movie;
+					     everywhere else panel 51 shows the same people and searches TMDB instead. -->
+					<visible>String.IsEqual(ListItem.DBType,set)</visible>
 					<scrolltime tween="cubic" easing="out">300</scrolltime>
 					<onup>5000</onup>
 					<ondown>noop</ondown>
@@ -509,6 +516,310 @@
 							<param name="focused">Control.HasFocus(50)</param>
 						</include>
 					</focusedlayout>
+				</control>
+				<control type="panel" id="51">
+					<left>0</left>
+					<top>50</top>
+					<width>1782</width>
+					<height>262</height>
+					<orientation>horizontal</orientation>
+					<!-- Panel 50's cast, clickable: opens the person's filmography (scripts/person.py). -->
+					<visible>!String.IsEqual(ListItem.DBType,set)</visible>
+					<scrolltime tween="cubic" easing="out">300</scrolltime>
+					<onup>5000</onup>
+					<ondown>noop</ondown>
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<itemlayout width="156" height="262">
+						<include content="TraktCastCard" />
+					</itemlayout>
+					<focusedlayout width="156" height="262">
+						<include content="TraktCastCard">
+							<param name="focused">Control.HasFocus(51)</param>
+						</include>
+					</focusedlayout>
+					<content>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(0).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(0).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(0).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(0).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(1).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(1).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(1).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(1).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,1)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(2).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(2).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(2).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(2).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,2)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(3).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(3).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(3).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(3).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,3)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(4).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(4).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(4).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(4).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,4)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(5).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(5).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(5).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(5).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,5)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(6).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(6).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(6).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(6).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,6)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(7).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(7).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(7).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(7).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,7)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(8).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(8).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(8).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(8).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,8)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(9).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(9).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(9).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(9).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,9)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(10).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(10).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(10).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(10).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,10)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(11).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(11).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(11).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(11).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,11)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(12).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(12).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(12).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(12).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,12)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(13).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(13).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(13).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(13).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,13)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(14).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(14).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(14).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(14).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,14)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(15).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(15).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(15).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(15).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,15)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(16).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(16).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(16).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(16).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,16)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(17).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(17).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(17).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(17).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,17)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(18).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(18).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(18).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(18).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,18)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(19).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(19).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(19).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(19).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,19)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(20).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(20).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(20).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(20).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,20)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(21).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(21).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(21).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(21).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,21)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(22).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(22).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(22).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(22).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,22)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(23).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(23).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(23).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(23).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,23)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(24).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(24).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(24).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(24).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,24)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(25).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(25).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(25).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(25).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,25)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(26).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(26).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(26).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(26).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,26)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(27).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(27).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(27).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(27).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,27)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(28).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(28).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(28).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(28).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,28)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(29).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(29).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(29).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(29).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,29)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(30).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(30).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(30).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(30).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,30)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(31).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(31).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(31).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(31).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,31)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(32).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(32).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(32).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(32).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,32)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(33).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(33).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(33).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(33).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,33)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(34).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(34).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(34).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(34).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,34)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(35).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(35).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(35).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(35).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,35)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(36).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(36).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(36).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(36).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,36)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(37).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(37).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(37).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(37).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,37)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(38).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(38).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(38).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(38).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,38)</visible>
+						</item>
+						<item>
+							<label>$INFO[Container(50).ListItemAbsolute(39).Label]</label>
+							<label2>$INFO[Container(50).ListItemAbsolute(39).Label2]</label2>
+							<thumb>$INFO[Container(50).ListItemAbsolute(39).Art(thumb)]</thumb>
+							<onclick>RunScript(special://skin/scripts/person.py,cast,$ESCINFO[Container(50).ListItemAbsolute(39).Label])</onclick>
+							<visible>Integer.IsGreater(Container(50).NumItems,39)</visible>
+						</item>
+					</content>
 				</control>
 			</control>
 		</control>

@@ -214,7 +214,7 @@
 		<value condition="Control.HasFocus(121)">Add to your Trakt watchlist</value>
 		<value condition="Control.HasFocus(11)">Play trailer</value>
 		<value condition="Control.HasFocus(7)">Set your rating</value>
-		<value condition="Control.HasFocus(13)">More from $INFO[ListItem.Director]</value>
+		<value condition="Control.HasFocus(210)">More from $INFO[ListItem.Director]</value>
 		<value condition="Control.HasFocus(14)">Versions</value>
 		<value condition="Control.HasFocus(15)">Extras</value>
 		<value condition="Control.HasFocus(10)">Choose artwork</value>

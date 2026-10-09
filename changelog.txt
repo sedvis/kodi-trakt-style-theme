@@ -4,6 +4,7 @@
 - Info page: long titles no longer run into the "Directed by" line
 - Home loads only the rows of the active tab (Media / Shows / Movies) instead of every row of every tab at start-up, and personal Trakt rows only when Trakt is connected; rows preload one page ahead instead of two. Much lighter on Android boxes
 - Kodi now starts on the Home screen by default; "Elementum main menu" is still available under Skin settings > Home screen > When Kodi starts, open
+- Info page: selecting an actor or the director button opens that person's filmography from TMDB (movies and shows); picking a title opens its info page with Play / Browse. Needs a TMDB API key in Elementum > Settings > Advanced > TheMovieDB > API key. Kodi's own cast search only looked in the local library, where Elementum titles are not
 - Rounded buttons and dialog backgrounds from the restyled stock textures no longer stretch into ovals on tall controls (e.g. the selected category in add-on settings)
 
 [B]Trakt Style 1.2.2[/B]
