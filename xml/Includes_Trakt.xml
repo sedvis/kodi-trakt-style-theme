@@ -157,6 +157,7 @@
 	</include>
 
 	<!-- ===================================================================== Info page (DialogVideoInfo) -->
+	<expression name="info_is_elementum_show">String.IsEqual(ListItem.DBType,tvshow) + String.Contains(ListItem.FileNameAndPath,plugin.video.elementum) + !String.IsEmpty(ListItem.UniqueID(tmdb))</expression>
 	<expression name="info_is_elementum_movie">String.IsEqual(ListItem.DBType,movie) + String.Contains(ListItem.FileNameAndPath,plugin.video.elementum) + !String.IsEmpty(ListItem.UniqueID(tmdb))</expression>
 	<variable name="TraktInfoBackdrop">
 		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -205,6 +206,7 @@
 		<value>No activity</value>
 	</variable>
 	<variable name="TraktInfoTooltip">
+		<value condition="Control.HasFocus(200)">Next episode from your Trakt progress, otherwise the first episode</value>
 		<value condition="Control.HasFocus(120) + Integer.IsGreater(ListItem.PlayCount,0)">Mark as unwatched on Trakt</value>
 		<value condition="Control.HasFocus(120)">Mark as watched on Trakt</value>
 		<value condition="Control.HasFocus(121)">Add to your Trakt watchlist</value>
@@ -215,6 +217,12 @@
 		<value condition="Control.HasFocus(15)">Extras</value>
 		<value condition="Control.HasFocus(10)">Choose artwork</value>
 		<value condition="Control.HasFocus(6)">Refresh information</value>
+	</variable>
+	<!-- Info page: Kodi's Play/Browse button (8) is the primary button, except on Elementum shows
+	     where our Play (200) comes first and Browse becomes the secondary one. -->
+	<variable name="TraktInfoBrowseColor">
+		<value condition="$EXP[info_is_elementum_show]">surface_hi</value>
+		<value>accent</value>
 	</variable>
 	<variable name="TraktCastHeader">
 		<value condition="Container.Content(Sets)">$LOCALIZE[20457]</value>

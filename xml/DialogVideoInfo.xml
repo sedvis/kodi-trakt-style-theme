@@ -4,6 +4,7 @@
      14 versions, 15 extras, 10 artwork, 6 refresh, 50 cast, 138 plot (text viewer). -->
 <window>
 	<defaultcontrol always="true">8</defaultcontrol>
+	<onload condition="$EXP[info_is_elementum_show]">SetFocus(200)</onload>
 	<onload>SetProperty(infobackground,$ESCINFO[ListItem.Art(fanart)],home)</onload>
 	<onunload>ClearProperty(infobackground,home)</onunload>
 	<controls>
@@ -119,9 +120,11 @@
 					<label>$VAR[TraktInfoPretitle]</label>
 					<visible>!String.IsEmpty(ListItem.TVShowTitle) + [String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]</visible>
 				</control>
+				<!-- Title grows with its text, up to three t_hero lines (~100px each); the old 186px
+				     cap made two-line titles spill over the "Directed by" line. -->
 				<control type="textbox">
 					<width>760</width>
-					<height min="94" max="186">auto</height>
+					<height min="100" max="310">auto</height>
 					<font>t_hero</font>
 					<textcolor>text_hi</textcolor>
 					<label>$VAR[TraktInfoTitle]</label>
@@ -301,10 +304,12 @@
 						<ondown>50</ondown>
 						<onleft>noop</onleft>
 						<onright>noop</onright>
-						<control type="radiobutton" id="8">
+						<!-- Elementum TV show: Play = next episode from Trakt progress, else S1 E1
+						     (scripts/play_show.py). Kodi's Browse (8) stays as the second button. -->
+						<control type="radiobutton" id="200">
 							<width>230</width>
 							<height>72</height>
-							<label>$VAR[VideoInfoPlayButtonLabelVar]</label>
+							<label>$LOCALIZE[208]</label>
 							<font>t_button</font>
 							<textcolor>text_hi</textcolor>
 							<focusedcolor>text_hi</focusedcolor>
@@ -312,6 +317,27 @@
 							<aligny>center</aligny>
 							<texturefocus colordiffuse="accent_light" border="18">trakt/frames/rr16.png</texturefocus>
 							<texturenofocus colordiffuse="accent" border="18">trakt/frames/rr16.png</texturenofocus>
+							<radioposx>30</radioposx>
+							<radioposy>20</radioposy>
+							<radiowidth>32</radiowidth>
+							<radioheight>32</radioheight>
+							<selected>false</selected>
+							<textureradioofffocus colordiffuse="text_hi">trakt/icons/play.png</textureradioofffocus>
+							<textureradiooffnofocus colordiffuse="text_hi">trakt/icons/play.png</textureradiooffnofocus>
+							<onclick>RunScript(special://skin/scripts/play_show.py,$INFO[ListItem.UniqueID(tmdb)],$INFO[ListItem.FileNameAndPath])</onclick>
+							<visible>$EXP[info_is_elementum_show]</visible>
+						</control>
+						<control type="radiobutton" id="8">
+							<width>280</width>
+							<height>72</height>
+							<label>$VAR[VideoInfoPlayButtonLabelVar]</label>
+							<font>t_button</font>
+							<textcolor>text_hi</textcolor>
+							<focusedcolor>text_hi</focusedcolor>
+							<textoffsetx>74</textoffsetx>
+							<aligny>center</aligny>
+							<texturefocus colordiffuse="accent_light" border="18">trakt/frames/rr16.png</texturefocus>
+							<texturenofocus colordiffuse="$VAR[TraktInfoBrowseColor]" border="18">trakt/frames/rr16.png</texturenofocus>
 							<radioposx>30</radioposx>
 							<radioposy>20</radioposy>
 							<radiowidth>32</radiowidth>
