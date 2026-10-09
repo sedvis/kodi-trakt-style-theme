@@ -365,9 +365,12 @@
 							<param name="onclick_1">RunPlugin(plugin://plugin.video.elementum/movie/$INFO[ListItem.UniqueID(tmdb)]/watchlist/add)</param>
 							<param name="visible">$EXP[info_is_elementum_movie] + $EXP[trakt_signed_in]</param>
 						</include>
+						<!-- Trailer: scripts/trailer.py instead of Kodi's 11, which closes this page for
+						     good; the script reopens it when the trailer ends or is stopped. -->
 						<include content="TraktInfoIconButton">
-							<param name="id">11</param>
+							<param name="id">211</param>
 							<param name="icon">trakt/icons/trailer.png</param>
+							<param name="onclick_1">RunScript(special://skin/scripts/trailer.py,$ESCINFO[ListItem.Trailer],$ESCINFO[ListItem.FileNameAndPath],$INFO[ListItem.DBType],$INFO[ListItem.UniqueID(tmdb)])</param>
 							<param name="visible">!String.IsEmpty(ListItem.Trailer) + ![String.StartsWith(Container.FolderPath,plugin://) + String.Contains(Container.FolderPath,trailer)]</param>
 						</include>
 						<include content="TraktInfoIconButton">

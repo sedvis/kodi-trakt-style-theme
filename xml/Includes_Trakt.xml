@@ -212,7 +212,7 @@
 		<value condition="Control.HasFocus(120) + Integer.IsGreater(ListItem.PlayCount,0)">Mark as unwatched on Trakt</value>
 		<value condition="Control.HasFocus(120)">Mark as watched on Trakt</value>
 		<value condition="Control.HasFocus(121)">Add to your Trakt watchlist</value>
-		<value condition="Control.HasFocus(11)">Play trailer</value>
+		<value condition="Control.HasFocus(211)">Play trailer</value>
 		<value condition="Control.HasFocus(7)">Set your rating</value>
 		<value condition="Control.HasFocus(210)">More from $INFO[ListItem.Director]</value>
 		<value condition="Control.HasFocus(14)">Versions</value>
