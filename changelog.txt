@@ -1,3 +1,6 @@
+[B]Unreleased[/B]
+- Player: on 16:10 / 3:2 / 4:3 screens (e.g. MacBooks) the seek bar, now-playing block and info panel sit at the bottom of the screen again instead of floating above it
+
 [B]Trakt Style 1.2.4[/B]
 - Home: every row can open its full source list (e.g. Trending Movies) with Elementum's own paging - press Right at the end of the row for "View all", or click the row title; Back returns to the home screen
 - Info page: "No activity" now reads "Not watched yet"
