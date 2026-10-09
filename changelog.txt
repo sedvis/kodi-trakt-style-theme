@@ -1,3 +1,6 @@
+[B]Unreleased[/B]
+- Home: selecting a movie, show or episode opens its info page first (Play / Browse are there). Continue Watching still starts playback right away
+
 [B]Trakt Style 1.2.2[/B]
 - Home rows longer than the screen can now be paged with the mouse / touchpad: hovering a row shows ‹ › arrows at the right end of its header; they scroll the row a page at a time without moving the focus. Keyboard and remote navigation is unchanged
 

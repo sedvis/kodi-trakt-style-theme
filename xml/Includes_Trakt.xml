@@ -1266,6 +1266,10 @@
 		<onup>$PARAM[list_id]0</onup>
 		<ondown>$PARAM[list_id]8</ondown>
 		<pagecontrol>$PARAM[list_id]9</pagecontrol>
+		<!-- Select opens the info page first (Play is there); rows built with open_info=false
+		     (Continue Watching) keep Kodi's default and start playback right away. "Next page"
+		     items always open the next page. -->
+		<onclick condition="$PARAM[open_info] + !$EXP[item_is_nextpage] + !ListItem.IsParentFolder">Action(Info)</onclick>
 		<preloaditems>2</preloaditems>
 		<onback>SetFocus($PARAM[list_id],0,absolute)</onback>
 	</include>
@@ -1276,6 +1280,7 @@
 		<param name="icon">trakt/icons/section.png</param>
 		<param name="pill_right">$INFO[ListItem.Premiered]</param>
 		<param name="pill_right_visible">false</param>
+		<param name="open_info">true</param>
 		<definition>
 			<control type="group" id="$PARAM[list_id]0">
 				<width>1780</width>
@@ -1305,6 +1310,7 @@
 					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 					<include content="TraktRowCommon">
 						<param name="list_id">$PARAM[list_id]</param>
+						<param name="open_info">$PARAM[open_info]</param>
 					</include>
 					<itemlayout width="230" height="388">
 						<include content="TraktPosterCell">
@@ -1333,6 +1339,7 @@
 		<param name="icon">trakt/icons/section.png</param>
 		<param name="pill_right">$INFO[ListItem.Premiered]</param>
 		<param name="pill_right_visible">false</param>
+		<param name="open_info">true</param>
 		<definition>
 			<control type="group" id="$PARAM[list_id]0">
 				<width>1780</width>
@@ -1363,6 +1370,7 @@
 					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 					<include content="TraktRowCommon">
 						<param name="list_id">$PARAM[list_id]</param>
+						<param name="open_info">$PARAM[open_info]</param>
 					</include>
 					<itemlayout width="360" height="306">
 						<include content="TraktLandscapeCell">

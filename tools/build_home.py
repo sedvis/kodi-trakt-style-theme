@@ -10,9 +10,10 @@ E = "plugin://plugin.video.elementum"
 
 # (list_id, mode, kind, label, path, flags)
 #   kind: poster | landscape | calendar      flags: auth (needs Trakt sign-in), library (needs local library)
+#   flag play: selecting an item plays it right away (default: open the info page first)
 ROWS = [
     # ---- Media (mixed, like Trakt's home)
-    (5101, "media", "landscape", "Continue Watching", f"{E}/shows/trakt/progress", {"auth"}),
+    (5101, "media", "landscape", "Continue Watching", f"{E}/shows/trakt/progress", {"auth", "play"}),
     (5102, "media", "calendar", "Calendar", f"{E}/shows/trakt/calendars/shows", {"auth"}),
     (5103, "media", "poster", "Watchlist · Movies", f"{E}/movies/trakt/watchlist", {"auth"}),
     (5104, "media", "poster", "Watchlist · Shows", f"{E}/shows/trakt/watchlist", {"auth"}),
@@ -22,7 +23,7 @@ ROWS = [
     (5108, "media", "poster", "In Progress · Library", "special://skin/playlists/inprogress_movies.xsp", {"library_movies"}),
     (5109, "media", "landscape", "Recently Added Episodes · Library", "videodb://recentlyaddedepisodes/", {"library_tv"}),
     # ---- Shows
-    (5201, "shows", "landscape", "Continue Watching", f"{E}/shows/trakt/progress", {"auth"}),
+    (5201, "shows", "landscape", "Continue Watching", f"{E}/shows/trakt/progress", {"auth", "play"}),
     (5202, "shows", "calendar", "Calendar", f"{E}/shows/trakt/calendars/shows", {"auth"}),
     (5203, "shows", "poster", "Trending", f"{E}/shows/trakt/trending", set()),
     (5204, "shows", "poster", "Popular", f"{E}/shows/trakt/popular", set()),
@@ -65,6 +66,8 @@ def row_xml(list_id, mode, kind, label, path, flags):
             '\t\t\t\t\t\t<param name="pill_right">$INFO[ListItem.Premiered]</param>\n'
             '\t\t\t\t\t\t<param name="pill_right_visible">true</param>\n'
         )
+    if "play" in flags:
+        extra += '\t\t\t\t\t\t<param name="open_info">false</param>\n'
     path_xml = path.replace("&", "&amp;")
     return (
         f'\t\t\t\t\t<include content="{inc}">\n'

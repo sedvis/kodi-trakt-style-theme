@@ -91,6 +91,7 @@
 						<param name="label">Continue Watching</param>
 						<param name="path">plugin://plugin.video.elementum/shows/trakt/progress</param>
 						<param name="visible">$EXP[home_mode_media] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
+						<param name="open_info">false</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5102</param>
@@ -147,6 +148,7 @@
 						<param name="label">Continue Watching</param>
 						<param name="path">plugin://plugin.video.elementum/shows/trakt/progress</param>
 						<param name="visible">$EXP[home_mode_shows] + $EXP[elementum_on] + $EXP[trakt_signed_in]</param>
+						<param name="open_info">false</param>
 					</include>
 					<include content="TraktLandscapeRow">
 						<param name="list_id">5202</param>
