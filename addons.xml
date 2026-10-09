@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="skin.traktstyle" version="1.2.2" name="Trakt Style" provider-name="Estuary by phil65, Ichabod Fletchman; Trakt Style mod">
+<addon id="skin.traktstyle" version="1.2.3" name="Trakt Style" provider-name="Estuary by phil65, Ichabod Fletchman; Trakt Style mod">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>
