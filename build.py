@@ -23,7 +23,7 @@ REPO_SRC = ROOT / "repository" / REPO_ID
 
 # Repo-only files that must not end up inside the skin package.
 SKIN_EXCLUDE = {".git", ".gitignore", ".gitattributes", "README.md", "build.py",
-                "repository", "dist", "docs", "__pycache__"}
+                "repository", "dist", "docs", "tools", "__pycache__"}
 
 
 def addon_version(addon_xml: Path) -> str:
@@ -38,6 +38,8 @@ def zip_addon(src: Path, addon_id: str, out: Path, exclude=frozenset()):
         for path in sorted(src.rglob("*")):
             rel = path.relative_to(src)
             if rel.parts[0] in exclude or not path.is_file():
+                continue
+            if "__pycache__" in rel.parts or path.suffix == ".pyc":
                 continue
             zf.write(path, f"{addon_id}/{rel.as_posix()}")
     return out

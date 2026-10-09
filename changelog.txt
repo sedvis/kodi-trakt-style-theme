@@ -1,3 +1,6 @@
+[B]Trakt Style 1.2.2[/B]
+- Home rows longer than the screen can now be paged with the mouse / touchpad: hovering a row shows ‹ › arrows at the right end of its header; they scroll the row a page at a time without moving the focus. Keyboard and remote navigation is unchanged
+
 [B]Trakt Style 1.2.1[/B]
 - Mouse wheel / touchpad on the home screen now moves between rows (the page scrolls) instead of scrolling the row under the pointer sideways; rows still scroll sideways with Left/Right. Done with a small keymap the skin writes to userdata/keymaps (skin.traktstyle-home-wheel.xml); can be turned off in Skin settings > Home screen
 - "Backdrop of the focused title on the home screen" is now off by default

@@ -26,7 +26,7 @@ The skin was designed and written together with [Claude](https://claude.ai) (Ant
 - **Start-up options** — open Kodi straight into Elementum (Back still returns to the home screen).
 - **Colour themes** — default Trakt purple, Classic Red, Ink Blue.
 - Skin settings for Trakt rows, local library rows, home backdrop, start-up window and home content.
-- **Mouse / touchpad friendly home screen** — the wheel moves between rows instead of scrolling a row sideways (rows scroll sideways with Left/Right, like on a remote). This uses a small keymap the skin writes to `userdata/keymaps/skin.traktstyle-home-wheel.xml`; turn it off in *Skin settings → Home screen*, or delete that file if you switch to another skin.
+- **Mouse / touchpad friendly home screen** — the wheel moves between rows instead of scrolling a row sideways; hovering a row shows ‹ › arrows at the right end of its header that page the row (with a keyboard or remote, rows scroll sideways with Left/Right as usual). This uses a small keymap the skin writes to `userdata/keymaps/skin.traktstyle-home-wheel.xml`; turn it off in *Skin settings → Home screen*, or delete that file if you switch to another skin.
 
 ## Requirements
 
@@ -73,6 +73,8 @@ Download `skin.traktstyle-<version>.zip` from the [Releases](https://github.com/
 ```bash
 python build.py
 ```
+
+Source generators live in `tools/`: `build_home.py` writes `xml/Home.xml` (edit its `ROWS` list, not the XML), `make_assets.py` renders the textures and icons (needs Pillow, the Lucide icon font and Roboto Bold), `restyle_stock.py` restyles the stock Estuary media.
 
 Creates in `dist/`:
 
